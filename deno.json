@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "dev": "deno run --watch --allow-read --env-file=.env --allow-env --allow-net main.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@types/express": "npm:@types/express@^5.0.0",
+    "@types/pg": "npm:@types/pg@^8.11.10",
+    "express": "npm:express@^4.21.2",
+    "pg": "npm:pg@^8.13.1"
+  }
+}
