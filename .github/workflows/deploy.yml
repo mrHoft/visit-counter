@@ -1,0 +1,46 @@
+name: Cavex server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-n-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create env file
+        run: |
+          cd ./apps/server
+          touch .env
+          echo APP_PORT=3082 >> .env
+          echo PG_URL=127.0.0.1 >> .env
+          echo PG_PORT=5432 >> .env
+          echo PG_DB=counter >> .env
+          echo PG_PWD=${{ secrets.PG_PWD }} >> .env
+
+      - name: Copy files via ssh
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          port: 22
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          source: '.'
+          target: '~/apps/counter'
+
+      - name: Executing remote ssh commands
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          port: 22
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          script: |
+            pm2 stop counter
+            cd ~/apps/counter
+            deno install
+
+            pm2 start -n counter deno -- task start
