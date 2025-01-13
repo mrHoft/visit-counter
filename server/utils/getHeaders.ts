@@ -8,7 +8,7 @@ export default function getHeaders(headers: IncomingHttpHeaders) {
     const ua = headers['sec-ch-ua-platform']
     if (Array.isArray(ua)) return ua[0]
     return ua
-  })()?.replace('"', '')
+  })()?.replaceAll('"', '')
   const agent = (() => {
     const ua = headers['sec-ch-ua']
     if (ua) {
@@ -16,7 +16,7 @@ export default function getHeaders(headers: IncomingHttpHeaders) {
       return ua.split(',')[0]
     }
     return headers['user-agent']?.split(' ')[0]
-  })()?.replace('"', '')
+  })()?.replaceAll('"', '')
 
   return { timestamp, referer, host, platform, agent }
 }

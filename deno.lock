@@ -4,9 +4,11 @@
     "jsr:@std/assert@1": "1.0.10",
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "npm:@types/express@5": "5.0.0",
+    "npm:@types/pg-pool@^2.0.6": "2.0.6",
+    "npm:@types/pg@8": "8.11.10",
     "npm:@types/pg@^8.11.10": "8.11.10",
     "npm:express@^4.21.2": "4.21.2",
-    "npm:pg@^8.13.1": "8.13.1"
+    "npm:pg-pool@^3.7.0": "3.7.0_pg@8.13.1"
   },
   "jsr": {
     "@std/assert@1.0.10": {
@@ -61,6 +63,12 @@
       "integrity": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
       "dependencies": [
         "undici-types"
+      ]
+    },
+    "@types/pg-pool@2.0.6": {
+      "integrity": "sha512-TaAUE5rq2VQYxab5Ts7WZhKNmuN78Q6PiFonTDdpbx8a1H0M1vhy3rhiMjl+e2iHmogyMw7jZF4FrE6eJUy5HQ==",
+      "dependencies": [
+        "@types/pg"
       ]
     },
     "@types/pg@8.11.10": {
@@ -588,9 +596,9 @@
     "dependencies": [
       "jsr:@std/assert@1",
       "npm:@types/express@5",
-      "npm:@types/pg@^8.11.10",
+      "npm:@types/pg-pool@^2.0.6",
       "npm:express@^4.21.2",
-      "npm:pg@^8.13.1"
+      "npm:pg-pool@^3.7.0"
     ]
   }
 }
