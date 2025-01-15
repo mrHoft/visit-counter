@@ -4,7 +4,7 @@ import { Client } from 'npm:@types/pg@8'
 
 const config = {
   database: Deno.env.get('PG_DB'),
-  user: 'counter',
+  user: Deno.env.get('PG_USER'),
   password: Deno.env.get('PG_PWD'),
   host: Deno.env.get('PG_URL'),
   port: 5432,
@@ -12,7 +12,7 @@ const config = {
   max: 20, // set pool max size to 20
   idleTimeoutMillis: 1000, // close idle clients after 1 second
   connectionTimeoutMillis: 1000, // return an error after 1 second if connection could not be established
-  maxUses: 7500, // close (and replace) a connection after it has been used 7500 times (see below for discussion)
+  maxUses: 7500, // close (and replace) a connection after it has been used 7500 times
 }
 
 class DB {
@@ -20,7 +20,7 @@ class DB {
   private _client: Client | null = null
 
   constructor() {
-    this.pool.on('error', (err) => {
+    this.pool.on('error', err => {
       console.error('Unexpected error on idle client', err)
       this.pool.end()
     })
@@ -42,11 +42,10 @@ class DB {
 
   get client() {
     if (this._client) Promise.resolve(this._client)
-    return this.pool.connect()
-      .then((client) => {
-        this._client = client
-        return client
-      })
+    return this.pool.connect().then(client => {
+      this._client = client
+      return client
+    })
   }
 }
 

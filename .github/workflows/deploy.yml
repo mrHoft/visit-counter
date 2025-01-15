@@ -1,10 +1,10 @@
-name: Cavex server
+name: Counter server
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-n-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,6 +19,7 @@ jobs:
           echo PG_URL=127.0.0.1 >> .env
           echo PG_PORT=5432 >> .env
           echo PG_DB=counter >> .env
+          echo PG_USER=counter >> .env
           echo PG_PWD=${{ secrets.PG_PWD }} >> .env
 
       - name: Copy files via ssh
