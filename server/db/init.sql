@@ -4,4 +4,4 @@ CREATE TABLE counter (
   value int4 NOT NULL DEFAULT 0
 );
 
-INSERT INTO counter (name) VALUES ('default') RETURNING *;
+INSERT INTO counter (name) VALUES ('default'), ('counter-example') RETURNING *;

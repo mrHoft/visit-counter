@@ -14,12 +14,15 @@ export default function getCounter(n: number, type: TCounterType = 'badge', titl
 const classic = (n: number) => {
   const PLACES = 4
   const countArray = n.toString().padStart(PLACES, '0').split('')
-  const parts = countArray.reduce((acc, next, i) => `
+  const parts = countArray.reduce(
+    (acc, next, i) => `
         ${acc}
         <rect id="Rectangle" fill="#000000" x="${i * 32}" y="0.5" width="29" height="29"></rect>
         <text id="0" font-family="Courier" font-size="24" font-weight="normal" fill="#00FF13">
             <tspan x="${i * 32 + 7}" y="22">${next}</tspan>
-        </text>`, '')
+        </text>`,
+    '',
+  )
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${
@@ -33,7 +36,7 @@ const classic = (n: number) => {
 }
 
 const badge = (n: number, title: string = 'Visit counter', color: string = '#007ec6') => {
-  const w1 = title.length * 6.5
+  const w1 = title.length * 8
   const w2 = Math.max(n.toString().length * 8.5, 20)
   const w = w1 + w2
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${w}" height="20">
@@ -49,10 +52,10 @@ const badge = (n: number, title: string = 'Visit counter', color: string = '#007
     <rect width="${w}" height="20" fill="url(#s)" />
   </g>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Arial,sans-serif" text-rendering="geometricPrecision" font-size="110" transform="scale(.1)">
-    <text x="${w1 * 10 / 2}" y="150" fill="#010101" fill-opacity=".3">${title}</text>
-    <text x="${w1 * 10 / 2}" y="140" fill="#fff">${title}</text>
-    <text x="${w1 * 10 + w2 * 10 / 2}" y="150" fill="#010101" fill-opacity=".3">${n}</text>
-    <text x="${w1 * 10 + w2 * 10 / 2}" y="140" fill="#fff">${n}</text>
+    <text x="${(w1 * 10) / 2}" y="150" fill="#010101" fill-opacity=".3">${title}</text>
+    <text x="${(w1 * 10) / 2}" y="140" fill="#fff">${title}</text>
+    <text x="${w1 * 10 + (w2 * 10) / 2}" y="150" fill="#010101" fill-opacity=".3">${n}</text>
+    <text x="${w1 * 10 + (w2 * 10) / 2}" y="140" fill="#fff">${n}</text>
   </g>
 </svg>`
 }

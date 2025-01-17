@@ -592,6 +592,16 @@
       "integrity": "sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ=="
     }
   },
+  "redirects": {
+    "https://esm.sh/@types/react-dom@~17.0.26/server.d.ts": "https://esm.sh/@types/react-dom@17.0.26/server.d.ts",
+    "https://esm.sh/@types/react@~17.0.83/index.d.ts": "https://esm.sh/@types/react@17.0.83/index.d.ts"
+  },
+  "remote": {
+    "https://esm.sh/react-dom@17.0.2/denonext/server.mjs": "beb5eceaad4b68df47a9fdfaafaefd7316817438b5ec1cfcb12a25542d0ef272",
+    "https://esm.sh/react-dom@17.0.2/server": "5eac71efdcc32a6666103379abaf9bfaac0ab934812289b04b9782d41a9d4074",
+    "https://esm.sh/react@17.0.2": "d98cee3a0958fa7400920506304472ba6f1a1612dfeedf6addda3ff6072ffa2d",
+    "https://esm.sh/react@17.0.2/denonext/react.mjs": "e9aac02ed1447f21381f3f075927259b041f963e912038c8e08ade86f3f4e2aa"
+  },
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
