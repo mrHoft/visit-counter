@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { React } from '../../utils/deps.ts'
 
 export type TInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'onBlur'> & {
   type?: string
@@ -17,7 +17,7 @@ export type TInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onC
   onBlur?: (value: string) => void
 }
 
-const Input = forwardRef<HTMLInputElement, TInputProps>(
+const Input = React.forwardRef<HTMLInputElement, TInputProps>(
   (
     {
       type,

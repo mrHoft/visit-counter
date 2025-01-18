@@ -1,4 +1,4 @@
-import React from 'react'
+import { React } from '../../utils/deps.ts'
 
 export type TButtonProps = {
   children: string | JSX.Element
