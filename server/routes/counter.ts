@@ -18,7 +18,7 @@ const performCounter = async (
   // TODO: analitics database recording
   // const headers = { name, title, color, ...getHeaders(req.headers) }; console.log(headers)
   const { rows } = await db.pool.query<Record<'value', number>>(
-    'UPDATE counter SET value = value + 1 WHERE name = $1 RETURNING value;',
+    'UPDATE counters SET value = value + 1 WHERE name = $1 RETURNING value;',
     [name],
   )
   if (!rows.length) return res.status(404).end(`Counter ${name} not found.`)

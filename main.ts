@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, Next } from 'express'
 import performCounter from '~/server/routes/counter.ts'
 import {resSrcFiles, resPageAdmin, resFavicon} from './client/routes/index.ts'
-import logAvailableCounters from '~/server/utils/logAvailableCounters.ts'
+import checkTables from '~/server/db/checks.ts'
 
 const PORT = Number(Deno.env.get('APP_PORT'))
 if (!PORT) throw new Error('APP_PORT is not defined!')
@@ -20,7 +20,7 @@ app.get('/admin', resPageAdmin)
 app.get('/:name', performCounter)
 
 app.listen(PORT, () => {
-  // logAvailableCounters()
+  checkTables()
 
   console.log(`\x1b[33m  → ✨ Server is listening on port: \x1b[96m${PORT}\x1b[0m`)
 })

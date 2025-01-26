@@ -21,7 +21,7 @@ Featured:
 - Analytics
 
 ### Project usage:
-1. Databese must be configured and table initialized ([init](./server/db/init.sql)).
+1. Postgres must be configured.
 2. cp .env.example .env
 3. `deno task start`: to start express server on 3082 port.
 4. Counter: `localhost:3082/<conter-name>/?type=badge&title=Counter&color=red`.
