@@ -12,9 +12,9 @@ export function createAdminUserToken() {
   return Promise.reject()
 }
 
-export async function validateAdminUser(token: string) {
+export async function validateUser(token: string, password: string) {
   if (JWT_SECRET) {
-    return (await validateJWT(token, JWT_SECRET)).user === (Deno.env.get('ADMIN_NAME') ?? 'admin')
+    return (await validateJWT(token, JWT_SECRET)).password === password
   }
   return false
 }

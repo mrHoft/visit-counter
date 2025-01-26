@@ -12,7 +12,8 @@ async function createCountersTable() {
     CREATE TABLE IF NOT EXISTS counters (
       id serial PRIMARY KEY,
       name varchar(25) NOT NULL UNIQUE,
-      value int4 NOT NULL DEFAULT 0
+      value int4 NOT NULL DEFAULT 0,
+      created_at timestamptz NOT NULL DEFAULT now()
     );`)
 }
 
@@ -57,8 +58,11 @@ async function createUsersTable() {
       CREATE TABLE IF NOT EXISTS users (
         id serial PRIMARY KEY,
         name varchar(25) NOT NULL UNIQUE,
+        email varchar(25),
         role role NOT NULL DEFAULT 'user',
-        token varchar(256) NOT NULL
+        token varchar(256) NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now()
       );`)
 }
 

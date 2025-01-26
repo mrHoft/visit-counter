@@ -23,7 +23,7 @@
     "semiColons": false,
     "singleQuote": true,
     "proseWrap": "preserve",
-    "include": ["server/"],
+    "include": ["server/", "client/"],
     "exclude": ["src/testdata/", "src/fixtures/**/*.ts"]
   }
 }

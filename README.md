@@ -19,6 +19,7 @@ Includes:
 
 Featured:
 - Analytics
+- Auto installer of database and app using Docker
 
 ### Project usage:
 1. Postgres must be configured.
