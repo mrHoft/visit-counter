@@ -58,9 +58,25 @@ body {
   background-color: var(--color00);
 }
 
+#app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 main {
   margin: 0;
   width: 100%;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.footer {
+  margin-top: 2rem;
 }
 
 ul {
@@ -80,6 +96,7 @@ a:hover {
 
 .align_center {
   display: flex;
+  align-items: center;
   justify-content: center;
 }
 
@@ -97,11 +114,9 @@ textarea {
 }
 
 .page {
-  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .form {
@@ -109,7 +124,6 @@ textarea {
   flex-direction: column;
   row-gap: 1rem;
   width: 16rem;
-  margin-bottom: 2rem;
   padding: 2rem;
   background-color: var(--color10);
   border-radius: 1rem;
