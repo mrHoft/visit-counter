@@ -73,6 +73,11 @@ main {
 
 .header {
   margin-bottom: 2rem;
+  padding: 0 1rem;
+  border-bottom: 2px solid var(--color50);
+  min-width: 390px;
+  box-sizing: border-box;
+  justify-content: center;
 }
 .header h1 {
   margin: 0;
@@ -81,6 +86,10 @@ main {
 .footer {
   margin-top: 2rem;
   text-align: center;
+  padding: 0 1rem;
+  border-top: 2px solid var(--color50);
+  min-width: 390px;
+  box-sizing: border-box;
 }
 
 ul {
@@ -184,12 +193,6 @@ textarea {
   background-color: var(--color40);
 }
 
-.button:disabled {
-  background-color: var(--color20);
-  color: var(--color70);
-  cursor: auto;
-}
-
 .button__loader {
   display: inline-block;
   width: 1em;
@@ -202,6 +205,22 @@ textarea {
   mask-composite: subtract;
 }
 
+.button_square {
+  display: block;
+  padding: 0.2rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.25s linear;
+  background-color: var(--color40);
+}
+
+.button:disabled,
+.button_square:disabled {
+  background-color: var(--color20);
+  color: var(--color70);
+  cursor: auto;
+}
+
 @keyframes spin {
   to {
     transform: rotate(1turn);
@@ -209,7 +228,8 @@ textarea {
 }
 
 @media (hover: hover) {
-  .button:not(:disabled):hover {
+  .button:not(:disabled):hover,
+  .button_square:not(:disabled):hover {
     background-color: var(--color-accent80);
   }
 }
@@ -345,4 +365,16 @@ textarea {
 .pagination__slide:disabled {
   color: var(--color40);
   pointer-events: none;
+}
+
+/* Table */
+th {
+  background-color: var(--color20);
+  padding: 0.2rem 0.5rem;
+}
+
+.table__manage {
+  display: flex;
+  column-gap: 2px;
+  justify-content: space-around;
 }

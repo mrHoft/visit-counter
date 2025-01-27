@@ -5,7 +5,8 @@ import Header from './widgets/header.tsx'
 import type { TUser } from './api/types.ts'
 import storeUser from './entities/user.ts'
 import MainMenu, { type TMode } from './widgets/menu.tsx'
-import { ButtonSecondary } from './ui/button.tsx'
+import ManageCounters from './widgets/counters.tsx'
+import ManageUsers from './widgets/users.tsx'
 
 export default function App({ server, initialUser }: { server?: boolean; initialUser?: TUser }) {
   const [user, setUser] = server ? [initialUser, () => {}] : React.useState<TUser | undefined>(initialUser)
@@ -28,20 +29,8 @@ export default function App({ server, initialUser }: { server?: boolean; initial
       <main className="page">
         {mode === 'login' && <LoginForm server={server} />}
         {mode === 'menu' && <MainMenu user={user!} modeChange={setMode} />}
-        {mode === 'counters' && (
-          <>
-            <h2>Manage counters</h2>
-            <p>Not implemented.</p>
-            <ButtonSecondary onClick={() => setMode('menu')}>Back</ButtonSecondary>
-          </>
-        )}
-        {mode === 'users' && (
-          <>
-            <h2>Manage users</h2>
-            <p>Not implemented.</p>
-            <ButtonSecondary onClick={() => setMode('menu')}>Back</ButtonSecondary>
-          </>
-        )}
+        {mode === 'counters' && <ManageCounters modeChange={setMode} />}
+        {mode === 'users' && <ManageUsers modeChange={setMode} />}
       </main>
       <Footer server={server} />
     </>
