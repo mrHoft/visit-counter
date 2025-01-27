@@ -5,6 +5,7 @@ export type TCountersTableSchema = {
   name: string
   value: number
   created_at: string
+  created_by: string
 }
 
 export type TUserRole = 'admin' | 'user' | 'guest'
@@ -17,4 +18,5 @@ export type TUsersTableSchema = {
   role: TUserRole
   created_at: string
   updated_at: string
+  created_by: string
 }

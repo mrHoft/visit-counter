@@ -1,10 +1,12 @@
-import { React } from '../../utils/deps.ts'
-import { ButtonSecondary } from '../ui/button.tsx'
-import type { TMode } from './menu.tsx'
-import type { TCounter } from '../api/types.ts'
-import { getCounters } from '../api/getCounters.ts'
-import { ButtonDel } from '../ui/squareDel.tsx'
-import { ButtonEdit } from '../ui/squareEdit.tsx'
+import { React } from '../../../utils/deps.ts'
+import { ButtonSecondary } from '../../ui/button.tsx'
+import type { TMode } from '../menu.tsx'
+import type { TCounter } from '../../api/types.ts'
+import { getCounters } from '../../api/getCounters.ts'
+import { ButtonDel } from '../../ui/squareDel.tsx'
+import { ButtonEdit } from '../../ui/squareEdit.tsx'
+import CounterAdd from './add.tsx'
+import Modal from '../modal.tsx'
 
 type TManageCountersProps = { modeChange: (mode: TMode) => void }
 
@@ -12,7 +14,7 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
   const [counters, setCounters] = React.useState<TCounter[]>([])
   const [loading, setLoading] = React.useState(false)
 
-  React.useEffect(() => {
+  const tableUptate = () => {
     setLoading(true)
     getCounters()
       .then(res => {
@@ -20,6 +22,14 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
         if (res.error) console.error(res.error)
       })
       .finally(() => setLoading(false))
+  }
+
+  const handleCounterAdd = () => {
+    Modal.show(<CounterAdd onSuccess={tableUptate} />)
+  }
+
+  React.useEffect(() => {
+    tableUptate()
   }, [])
 
   return (
@@ -35,6 +45,7 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
             <th>Name</th>
             <th>Value</th>
             <th>Created</th>
+            <th>By</th>
             <th>{`Total: ${counters.length}`}</th>
           </tr>
         </thead>
@@ -44,7 +55,8 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
               <td>{counter.id}</td>
               <td>{counter.name}</td>
               <td>{counter.value}</td>
-              <td>{counter.created_at}</td>
+              <td>{counter.created_at.slice(0, 10)}</td>
+              <td>{counter.created_by}</td>
               <td className="table__manage">
                 <ButtonDel disabled={loading} />
                 <ButtonEdit disabled={loading} />
@@ -54,7 +66,7 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
         </tbody>
       </table>
       <div className="flex_wrap" style={{ marginTop: '1rem' }}>
-        <ButtonSecondary>Add</ButtonSecondary>
+        <ButtonSecondary onClick={handleCounterAdd}>Add</ButtonSecondary>
         <ButtonSecondary onClick={() => modeChange('menu')}>Back</ButtonSecondary>
       </div>
     </>

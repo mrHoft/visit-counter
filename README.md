@@ -32,3 +32,7 @@ Featured:
 - type: 'badge' | 'number' | 'classic'
 - title: string
 - color: string
+
+### Features:
+- Sign in by credentials, auto auth by token.
+- SSR, Bundle on fly.

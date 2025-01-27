@@ -1,9 +1,6 @@
 import db from '~/server/utils/pool.ts'
 import { createAdminUserToken } from '~/server/utils/users.ts'
-
-const ERROR_CODES = {
-  relation: '42P01', // relation does not exist
-}
+import { ERROR_CODES } from '~/server/db/codes.ts'
 
 async function createCountersTable() {
   console.log('No counters table found: creating one...')
@@ -13,7 +10,8 @@ async function createCountersTable() {
       id serial PRIMARY KEY,
       name varchar(25) NOT NULL UNIQUE,
       value int4 NOT NULL DEFAULT 0,
-      created_at timestamptz NOT NULL DEFAULT now()
+      created_at timestamptz NOT NULL DEFAULT now(),
+      created_by varchar(25) NOT NULL DEFAULT 'default'
     );`)
 }
 
@@ -62,7 +60,8 @@ async function createUsersTable() {
         role role NOT NULL DEFAULT 'user',
         token varchar(256) NOT NULL,
         created_at timestamptz NOT NULL DEFAULT now(),
-        updated_at timestamptz NOT NULL DEFAULT now()
+        updated_at timestamptz NOT NULL DEFAULT now(),
+        created_by varchar(25) NOT NULL DEFAULT 'default'
       );`)
 }
 

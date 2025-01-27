@@ -28,7 +28,7 @@ const getAuthState = async (cookie?: string) => {
 export default async function resPageAdmin(req: Request, res: Response) {
   const { cookie } = req.headers
   const initialUser = await getAuthState(cookie)
-  if (initialUser) console.log('Known user:', initialUser)
+  if (initialUser) console.log('Known user:', initialUser.name)
 
   const template = readFileSync(path.resolve('client/index.html'), 'utf-8')
   const html = ReactDomServer.renderToString(App({ server: true, initialUser }))

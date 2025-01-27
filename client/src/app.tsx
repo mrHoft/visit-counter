@@ -5,8 +5,9 @@ import Header from './widgets/header.tsx'
 import type { TUser } from './api/types.ts'
 import storeUser from './entities/user.ts'
 import MainMenu, { type TMode } from './widgets/menu.tsx'
-import ManageCounters from './widgets/counters.tsx'
+import ManageCounters from './widgets/counters/counters.tsx'
 import ManageUsers from './widgets/users.tsx'
+import Modal from './widgets/modal.tsx'
 
 export default function App({ server, initialUser }: { server?: boolean; initialUser?: TUser }) {
   const [user, setUser] = server ? [initialUser, () => {}] : React.useState<TUser | undefined>(initialUser)
@@ -33,6 +34,7 @@ export default function App({ server, initialUser }: { server?: boolean; initial
         {mode === 'users' && <ManageUsers modeChange={setMode} />}
       </main>
       <Footer server={server} />
+      <Modal />
     </>
   )
 }

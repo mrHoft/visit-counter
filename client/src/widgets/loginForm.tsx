@@ -23,7 +23,7 @@ export default function LoginForm({ server }: { server?: boolean }) {
   }
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
+    <form className="form login" onSubmit={handleSubmit}>
       <div>Please login:</div>
       <Input
         type="text"

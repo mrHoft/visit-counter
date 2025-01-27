@@ -1,8 +1,11 @@
 import express, { Express, Request, Response, Next } from 'express'
 import performCounter from '~/server/routes/counter.ts'
 import performLogin from '~/server/routes/login.ts'
-import {resSrcFiles, resPageAdmin, resFavicon, resCounters} from './client/routes/index.ts'
+import {resSrcFiles, resPageAdmin, resFavicon} from './client/routes/index.ts'
+import resCounters from '~/server/routes/counters.ts'
+import addCounter from '~/server/routes/addCounter.ts'
 import checkTables from '~/server/db/checks.ts'
+import authMiddleware from '~/server/routes/authMiddleware.ts'
 
 const PORT = Number(Deno.env.get('APP_PORT'))
 if (!PORT) throw new Error('APP_PORT is not defined!')
@@ -21,6 +24,7 @@ app.get('/admin', resPageAdmin)
 app.get('/:name', performCounter)
 app.post('/api/login', performLogin)
 app.get('/api/counters', resCounters)
+app.post('/api/counter', authMiddleware, addCounter)
 
 app.listen(PORT, () => {
   checkTables()
