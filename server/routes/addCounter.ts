@@ -3,8 +3,10 @@ import { Request, Response } from 'express'
 import db from '~/server/utils/pool.ts'
 import { type TCountersTableSchema } from '~/server/db/types.ts'
 import { ERROR_CODES } from '~/server/db/codes.ts'
+import requestLog from '~/server/log/request.ts'
 
 const addCounter = (req: Request<unknown, unknown, { name: string; value: string }>, res: Response) => {
+  requestLog('Add counter', req.headers)
   const { name, value } = req.body
   const { name: createdBy } = req.user!
 

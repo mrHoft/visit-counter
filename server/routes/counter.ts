@@ -3,11 +3,13 @@ import { Request, Response } from 'express'
 import getCounter, { type TCounterType } from '~/server/template/counter.ts'
 // import getHeaders from '~/server/utils/getHeaders.ts'
 import db from '~/server/utils/pool.ts'
+import requestLog from '~/server/log/request.ts'
 
 const performCounter = async (
   req: Request<{ name: string }, unknown, unknown, { type?: TCounterType; title?: string; color?: string }>,
   res: Response,
 ) => {
+  requestLog('Get counter', req.headers)
   const { name } = req.params
 
   if (name.startsWith('favicon')) {

@@ -3,8 +3,10 @@ import { Request, Response } from 'express'
 import db from '~/server/utils/pool.ts'
 import { type TUsersTableSchema } from '~/server/db/types.ts'
 import { validateUser } from '~/server/utils/users.ts'
+import requestLog from '~/server/log/request.ts'
 
 const performLogin = async (req: Request<unknown, unknown, { name: string; password: string }>, res: Response) => {
+  requestLog('Login', req.headers)
   const { name, password } = req.body
 
   if (name.length < 3 || password.length < 5) {
