@@ -7,6 +7,7 @@ import { ButtonDel } from '../../ui/squareDel.tsx'
 import { ButtonEdit } from '../../ui/squareEdit.tsx'
 import CounterAdd from './add.tsx'
 import Modal from '../modal.tsx'
+import storeStats from '../../entities/stats.ts'
 
 type TManageCountersProps = { modeChange: (mode: TMode) => void }
 
@@ -17,9 +18,13 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
   const tableUptate = () => {
     setLoading(true)
     getCounters()
-      .then(res => {
-        if (res.counters) setCounters(res.counters)
-        if (res.error) console.error(res.error)
+      .then(({ counters, error }) => {
+        if (counters) {
+          setCounters(counters)
+          const requests = counters.reduce((acc, counter) => acc + counter.value, 0)
+          storeStats.stats = { ...storeStats.stats, counters: counters.length, requests }
+        }
+        if (error) console.error(error)
       })
       .finally(() => setLoading(false))
   }

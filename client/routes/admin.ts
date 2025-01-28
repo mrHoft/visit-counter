@@ -25,16 +25,28 @@ const getAuthState = async (cookie?: string) => {
   }
 }
 
+const getStats = async () => {
+  const { users } = (await db.pool.query<{ users: number }>('SELECT count(*) as "users" FROM users;')).rows[0]
+  const { counters } =
+    (await db.pool.query<{ counters: number }>('SELECT count(*) as "counters" FROM counters;')).rows[0]
+  const { requests } =
+    (await db.pool.query<{ requests: number }>('SELECT sum(value) as "requests" FROM counters;')).rows[0]
+  return { users, counters, requests }
+}
+
 export default async function resPageAdmin(req: Request, res: Response) {
   const { cookie } = req.headers
   const initialUser = await getAuthState(cookie)
   if (initialUser) console.log('Known user:', initialUser.name)
+  const stats = await getStats()
 
   const template = readFileSync(path.resolve('client/index.html'), 'utf-8')
   const html = ReactDomServer.renderToString(App({ server: true, initialUser }))
-  const stateMarkup = `<script id="state-outlet">globalThis.__INITIAL_USER_STATE__=${
-    JSON.stringify(initialUser)
-  };</script>`
+  const stateMarkup = /* html */ `
+  <script id="state-outlet">
+    globalThis.__INITIAL_USER__=${JSON.stringify(initialUser)};
+    globalThis.__INITIAL_STATS__=${JSON.stringify(stats)};
+  </script>`
   const output = template.replace('<!--app-outlet-->', html).replace('<!--state-outlet-->', stateMarkup) //.replace('/* css-outlet */', css)
 
   res.status(200).set({ 'Content-Type': 'text/html' }).end(output)

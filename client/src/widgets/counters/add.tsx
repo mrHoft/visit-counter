@@ -11,12 +11,11 @@ export default function CounterAdd({ onSuccess }: { onSuccess?: () => void }) {
     const formData = new FormData(el)
     const data = { name: formData.get('name')!.toString(), value: formData.get('value')!.toString() }
 
-    addCounter(data).then(({ error, counter }) => {
+    addCounter(data).then(({ error }) => {
       if (error) {
         alert(error)
         return
       }
-      console.log(counter)
       Modal.close()
       if (onSuccess) onSuccess()
     })
