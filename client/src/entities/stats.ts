@@ -4,10 +4,12 @@ export type TStats = {
   counters: number
   users: number
   requests: number
+  host: string
+  ip: string
 }
 
 class StoreStats extends EventEmitter {
-  private _stats: TStats = { counters: 0, users: 0, requests: 0 }
+  private _stats: TStats = { counters: 0, users: 0, requests: 0, host: '', ip: '' }
 
   public get stats() {
     return this._stats

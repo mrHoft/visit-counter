@@ -6,7 +6,7 @@ import { validateUser } from '~/server/utils/users.ts'
 import requestLog from '~/server/log/request.ts'
 
 const performLogin = async (req: Request<unknown, unknown, { name: string; password: string }>, res: Response) => {
-  requestLog('Login', req.headers)
+  requestLog('Login', req)
   const { name, password } = req.body
 
   if (name.length < 3 || password.length < 5) {

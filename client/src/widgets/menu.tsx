@@ -6,7 +6,7 @@ import storeStats, { type TStats } from '../entities/stats.ts'
 export type TMode = 'login' | 'menu' | 'counters' | 'users' | 'analytics'
 
 type TMunuProps = { user: TUser; server?: boolean; modeChange: (mode: TMode) => void }
-const defaultStats = { counters: 0, users: 0, requests: 0 }
+const defaultStats = { counters: 0, users: 0, requests: 0, host: '', ip: '' }
 
 export default function MainMenu({ user, server, modeChange }: TMunuProps) {
   const [isClient, setIsClient] = server ? [false, () => {}] : React.useState(false)
@@ -95,6 +95,7 @@ export default function MainMenu({ user, server, modeChange }: TMunuProps) {
           </g>
         </svg>
         <div>{user!.name}</div>
+        <div className="menu__btn_add">{stats.ip}</div>
       </div>
     </div>
   )

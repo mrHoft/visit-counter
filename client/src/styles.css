@@ -180,6 +180,7 @@ textarea {
 }
 
 .menu__btn {
+  position: relative;
   height: 8rem;
   display: flex;
   flex-direction: column;
@@ -192,6 +193,11 @@ textarea {
 }
 .menu__btn > svg {
   filter: invert(var(--color-scheme));
+}
+.menu__btn_add {
+  opacity: 0.5;
+  position: absolute;
+  bottom: 0.5rem;
 }
 
 @media (hover: hover) {

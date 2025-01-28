@@ -9,7 +9,7 @@ const performCounter = async (
   req: Request<{ name: string }, unknown, unknown, { type?: TCounterType; title?: string; color?: string }>,
   res: Response,
 ) => {
-  requestLog('Get counter', req.headers)
+  requestLog('Get counter', req)
   const { name } = req.params
 
   if (name.startsWith('favicon')) {
@@ -18,7 +18,7 @@ const performCounter = async (
 
   const { type, title, color } = req.query
   // TODO: analitics database recording
-  // const headers = { name, title, color, ...getHeaders(req.headers) }; console.log(headers)
+  // const headers = { name, title, color, ...getHeaders(req) }; console.log(headers)
   const { rows } = await db.pool.query<Record<'value', number>>(
     'UPDATE counters SET value = value + 1 WHERE name = $1 RETURNING value;',
     [name],
