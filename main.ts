@@ -4,6 +4,8 @@ import performLogin from '~/server/routes/login.ts'
 import {resSrcFiles, resPageAdmin, resFavicon} from './client/routes/index.ts'
 import resCounters from '~/server/routes/counters.ts'
 import addCounter from '~/server/routes/addCounter.ts'
+import editCounter from '~/server/routes/editCounter.ts'
+import delCounter from '~/server/routes/delCounter.ts'
 import checkTables from '~/server/db/checks.ts'
 import authMiddleware from '~/server/routes/authMiddleware.ts'
 
@@ -25,6 +27,8 @@ app.get('/:name', performCounter)
 app.post('/api/login', performLogin)
 app.get('/api/counters', resCounters)
 app.post('/api/counter', authMiddleware, addCounter)
+app.put('/api/counter/:id', authMiddleware, editCounter)
+app.delete('/api/counter/:id', authMiddleware, delCounter)
 
 app.listen(PORT, () => {
   checkTables()

@@ -247,7 +247,7 @@ textarea {
 
 .button:disabled,
 .button_square:disabled {
-  background-color: var(--color20);
+  background-color: var(--color30);
   color: var(--color70);
   cursor: auto;
 }
@@ -263,10 +263,6 @@ textarea {
   .button_square:not(:disabled):hover {
     background-color: var(--color-accent80);
   }
-}
-
-.button:not(:disabled):active {
-  background-color: var(--color-accent50);
 }
 
 /* Input */
@@ -360,11 +356,11 @@ textarea {
 .pagination__btn {
   min-width: 1.8rem;
   height: 1.8rem;
-  border: 1px solid var(--color50);
-  background-color: var(--color10);
+  background-color: var(--color40);
   cursor: pointer;
   outline: none;
-  transition: border-color 0.25s linear, background-color 0.25s linear;
+  border: none;
+  transition: background-color 0.25s linear;
 }
 
 .pagination__slide {
@@ -381,31 +377,41 @@ textarea {
 @media (hover: hover) {
   .pagination__slide:hover,
   .pagination__btn:hover {
-    border-color: var(--color60);
-    background-color: var(--color20);
+    background-color: var(--color-accent80);
   }
 }
 
+.pagination__slide:disabled,
 .pagination__btn:disabled {
+  color: var(--color50);
   background-color: var(--color30);
   pointer-events: none;
 }
 
-.pagination__slide:disabled {
-  color: var(--color40);
-  pointer-events: none;
+/* Table */
+table {
+  border-spacing: 0;
 }
 
-/* Table */
 th {
   background-color: var(--color20);
   padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+th span {
+  opacity: 0.5;
+  font-size: smaller;
+}
+
+td:not(:last-of-type) {
+  padding: 0 0.5rem;
+  border-bottom: 1px solid var(--color50);
 }
 
 .table__manage {
   display: flex;
   column-gap: 2px;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 /* Modal */

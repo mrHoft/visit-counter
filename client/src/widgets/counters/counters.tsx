@@ -6,14 +6,59 @@ import { getCounters } from '../../api/getCounters.ts'
 import { ButtonDel } from '../../ui/squareDel.tsx'
 import { ButtonEdit } from '../../ui/squareEdit.tsx'
 import CounterAdd from './add.tsx'
+import CounterEdit from './edit.tsx'
+import CounterDelete from './del.tsx'
 import Modal from '../modal.tsx'
 import storeStats from '../../entities/stats.ts'
+import Pagination from '../../ui/pagination.tsx'
 
+const pageSize = 10
+type TUsersSorting =
+  | 'id_asc'
+  | 'id_desc'
+  | 'name_asc'
+  | 'name_desc'
+  | 'value_asc'
+  | 'value_desc'
+  | 'date_asc'
+  | 'date_desc'
+  | 'creator_asc'
+  | 'creator_desc'
+  | null
 type TManageCountersProps = { modeChange: (mode: TMode) => void }
 
 export default function ManageCounters({ modeChange }: TManageCountersProps) {
   const [counters, setCounters] = React.useState<TCounter[]>([])
+  const [page, setPage] = React.useState(0)
   const [loading, setLoading] = React.useState(false)
+  const [sorting, setSorting] = React.useState<TUsersSorting>('id_desc')
+  const [sortingField, sortingOrder] = sorting ? sorting.split('_') : [null, 'asc']
+
+  const countersPage = (
+    !sorting
+      ? counters
+      : counters.sort((a, b) => {
+          const dir = sortingOrder === 'asc' ? 1 : -1
+          if (sortingField === 'name') {
+            if (a.name > b.name) return dir
+            return -dir
+          }
+          if (sortingField === 'value') {
+            if (a.value > b.value) return dir
+            return -dir
+          }
+          if (sortingField === 'date') {
+            if (a.created_at > b.created_at) return -dir
+            return dir
+          }
+          if (sortingField === 'creator') {
+            if (a.created_by > b.created_by) return -dir
+            return dir
+          }
+          if (a.id > b.id) return -dir
+          return dir
+        })
+  ).slice(page * pageSize, (page + 1) * pageSize)
 
   const tableUptate = () => {
     setLoading(true)
@@ -33,6 +78,26 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
     Modal.show(<CounterAdd onSuccess={tableUptate} />)
   }
 
+  const handleCounterEdit = (id: number) => () => {
+    const counter = counters.find(item => item.id === id)
+    if (counter) {
+      Modal.show(<CounterEdit counter={counter} onSuccess={tableUptate} />)
+    }
+  }
+
+  const handleCounterDelete = (id: number) => () => {
+    const counter = counters.find(item => item.id === id)
+    if (counter) {
+      Modal.show(<CounterDelete counter={counter} onSuccess={tableUptate} />)
+    }
+  }
+
+  const getDirection = (field: string) => {
+    if (sortingField === field) {
+      return <span>{sortingOrder === 'asc' ? ' ▲' : ' ▼'}</span>
+    }
+  }
+
   React.useEffect(() => {
     tableUptate()
   }, [])
@@ -46,16 +111,31 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
       <table>
         <thead>
           <tr>
-            <th>id</th>
-            <th>Name</th>
-            <th>Value</th>
-            <th>Created</th>
-            <th>By</th>
+            <th onClick={() => setSorting(prev => (prev === 'id_desc' ? 'id_asc' : 'id_desc'))}>
+              id
+              {getDirection('id')}
+            </th>
+            <th onClick={() => setSorting(prev => (prev === 'name_desc' ? 'name_asc' : 'name_desc'))}>
+              Name
+              {getDirection('name')}
+            </th>
+            <th onClick={() => setSorting(prev => (prev === 'value_desc' ? 'value_asc' : 'value_desc'))}>
+              Value
+              {getDirection('value')}
+            </th>
+            <th onClick={() => setSorting(prev => (prev === 'date_desc' ? 'date_asc' : 'date_desc'))}>
+              Created
+              {getDirection('date')}
+            </th>
+            <th onClick={() => setSorting(prev => (prev === 'creator_desc' ? 'creator_asc' : 'creator_desc'))}>
+              By
+              {getDirection('creator')}
+            </th>
             <th>{`Total: ${counters.length}`}</th>
           </tr>
         </thead>
         <tbody>
-          {counters.map(counter => (
+          {countersPage.map(counter => (
             <tr key={counter.id}>
               <td>{counter.id}</td>
               <td>{counter.name}</td>
@@ -63,13 +143,14 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
               <td>{counter.created_at.slice(0, 10)}</td>
               <td>{counter.created_by}</td>
               <td className="table__manage">
-                <ButtonDel disabled={loading} />
-                <ButtonEdit disabled={loading} />
+                <ButtonDel disabled={loading} onClick={handleCounterDelete(counter.id)} />
+                <ButtonEdit disabled={loading} onClick={handleCounterEdit(counter.id)} />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Pagination page={page} total={counters.length} pageSize={pageSize} onChange={setPage} />
       <div className="flex_wrap" style={{ marginTop: '1rem' }}>
         <ButtonSecondary onClick={handleCounterAdd}>Add</ButtonSecondary>
         <ButtonSecondary onClick={() => modeChange('menu')}>Back</ButtonSecondary>
