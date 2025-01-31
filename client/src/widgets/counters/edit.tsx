@@ -4,6 +4,7 @@ import Input from '../../ui/input.tsx'
 import Modal from '../modal.tsx'
 import { editCounter } from '../../api/editCounter.ts'
 import type { TCounter } from '../../api/types.ts'
+import Message from '../../widgets/message.tsx'
 
 export default function CounterEdit({ counter, onSuccess }: { counter: TCounter; onSuccess?: () => void }) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -14,7 +15,7 @@ export default function CounterEdit({ counter, onSuccess }: { counter: TCounter;
 
     editCounter(data).then(({ error }) => {
       if (error) {
-        alert(error)
+        Message.show(error, 'error')
         return
       }
       Modal.close()

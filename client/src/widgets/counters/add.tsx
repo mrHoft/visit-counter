@@ -3,6 +3,7 @@ import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Input from '../../ui/input.tsx'
 import Modal from '../modal.tsx'
 import { addCounter } from '../../api/addCounter.ts'
+import Message from '../../widgets/message.tsx'
 
 export default function CounterAdd({ onSuccess }: { onSuccess?: () => void }) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -13,7 +14,7 @@ export default function CounterAdd({ onSuccess }: { onSuccess?: () => void }) {
 
     addCounter(data).then(({ error }) => {
       if (error) {
-        alert(error)
+        Message.show(error, 'error')
         return
       }
       Modal.close()

@@ -3,12 +3,13 @@ import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Modal from '../modal.tsx'
 import { delCounter } from '../../api/delCounter.ts'
 import type { TCounter } from '../../api/types.ts'
+import Message from '../../widgets/message.tsx'
 
 export default function CounterDelete({ counter, onSuccess }: { counter: TCounter; onSuccess?: () => void }) {
   const handleSubmit = () => {
     delCounter({ id: counter.id }).then(({ error }) => {
       if (error) {
-        alert(error)
+        Message.show(error, 'error')
         return
       }
       Modal.close()

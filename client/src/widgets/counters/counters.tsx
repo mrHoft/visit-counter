@@ -11,6 +11,7 @@ import CounterDelete from './del.tsx'
 import Modal from '../modal.tsx'
 import storeStats from '../../entities/stats.ts'
 import Pagination from '../../ui/pagination.tsx'
+import Message from '../../widgets/message.tsx'
 
 const pageSize = 10
 type TUsersSorting =
@@ -69,7 +70,7 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
           const requests = counters.reduce((acc, counter) => acc + counter.value, 0)
           storeStats.stats = { ...storeStats.stats, counters: counters.length, requests }
         }
-        if (error) console.error(error)
+        if (error) Message.show(error, 'error')
       })
       .finally(() => setLoading(false))
   }

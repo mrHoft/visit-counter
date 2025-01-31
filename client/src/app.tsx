@@ -9,6 +9,7 @@ import ManageCounters from './widgets/counters/counters.tsx'
 import ManageUsers from './widgets/users.tsx'
 import Analytics from './widgets/analytics.tsx'
 import Modal from './widgets/modal.tsx'
+import Message from './widgets/message.tsx'
 
 export default function App({ server, initialUser }: { server?: boolean; initialUser?: TUser }) {
   const [user, setUser] = server ? [initialUser, () => {}] : React.useState<TUser | undefined>(initialUser)
@@ -37,6 +38,7 @@ export default function App({ server, initialUser }: { server?: boolean; initial
       </main>
       <Footer />
       <Modal />
+      <Message />
     </>
   )
 }
