@@ -1,13 +1,13 @@
 import { React } from '../../../utils/deps.ts'
 import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Modal from '../modal.tsx'
-import { delCounter } from '../../api/delCounter.ts'
-import type { TCounter } from '../../api/types.ts'
+import { delUser } from '../../api/delUser.ts'
+import type { TUser } from '../../api/types.ts'
 import Message from '../../widgets/message.tsx'
 
-export default function CounterDelete({ counter, onSuccess }: { counter: TCounter; onSuccess?: () => void }) {
+export default function UserDelete({ user, onSuccess }: { user: TUser; onSuccess?: () => void }) {
   const handleSubmit = () => {
-    delCounter({ id: counter.id }).then(({ error }) => {
+    delUser({ id: user.id }).then(({ error }) => {
       if (error) {
         Message.show(error, 'error')
         return
@@ -19,10 +19,10 @@ export default function CounterDelete({ counter, onSuccess }: { counter: TCounte
 
   return (
     <>
-      <h3>Edit counter</h3>
+      <h3>Delete user</h3>
       <div className="form">
         <p>
-          Are you sure you want to delete counter <span style={{ color: 'red' }}>{counter.name}</span>?
+          Are you sure you want to delete user <span style={{ color: 'red' }}>{user.name}</span>?
         </p>
         <div className="flex_wrap" style={{ marginTop: '1rem' }}>
           <ButtonSubmit onClick={handleSubmit}>Delete</ButtonSubmit>

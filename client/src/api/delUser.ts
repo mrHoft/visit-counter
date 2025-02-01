@@ -1,16 +1,10 @@
 import { TUser } from './types.ts'
 
-export async function login(
-  { name, password }: { name: string; password: string },
+export async function delUser(
+  data: { id: number },
 ): Promise<{ user?: TUser; error?: string }> {
   try {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, password }),
-    })
+    const res = await fetch(`/api/user/${data.id}`, { method: 'DELETE' })
 
     if (res.status !== 200) {
       return { error: await res.text() }

@@ -134,6 +134,7 @@ a:hover {
 
 button,
 input,
+select,
 textarea {
   background-color: unset;
   outline: none;
@@ -282,7 +283,9 @@ textarea {
   display: none;
 }
 
-.input {
+.input,
+.select {
+  width: 100%;
   padding: 1rem 0 0.6rem;
   border: none;
   background-color: inherit;
@@ -314,7 +317,18 @@ textarea {
   color: green;
 }
 
-.input__label {
+.select__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0.6rem;
+  color: inherit;
+  opacity: 0.7;
+  font-size: 0.8em;
+  pointer-events: none;
+  transition: 0.3s ease all;
+}
+
+.input__placeholder {
   position: absolute;
   top: 0.6rem;
   left: 0.6rem;
@@ -324,8 +338,8 @@ textarea {
   transition: 0.3s ease all;
 }
 
-.input:focus ~ .input__label,
-.input:not(:placeholder-shown) ~ .input__label {
+.input:focus ~ .input__placeholder,
+.input:not(:placeholder-shown) ~ .input__placeholder {
   top: 0;
   font-size: 0.8em;
 }

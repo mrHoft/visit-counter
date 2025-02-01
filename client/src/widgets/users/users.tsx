@@ -7,7 +7,7 @@ import { ButtonDel } from '../../ui/squareDel.tsx'
 import { ButtonEdit } from '../../ui/squareEdit.tsx'
 import UserAdd from './add.tsx'
 // import UserEdit from './edit.tsx'
-// import UserDelete from './del.tsx'
+import UserDelete from './del.tsx'
 import Modal from '../modal.tsx'
 import storeStats from '../../entities/stats.ts'
 import Pagination from '../../ui/pagination.tsx'
@@ -19,6 +19,8 @@ type TUsersSorting =
   | 'id_desc'
   | 'name_asc'
   | 'name_desc'
+  | 'role_asc'
+  | 'role_desc'
   | 'date_asc'
   | 'date_desc'
   | 'creator_asc'
@@ -40,6 +42,10 @@ export default function ManageUsers({ modeChange }: TManageUsersProps) {
           const dir = sortingOrder === 'asc' ? 1 : -1
           if (sortingField === 'name') {
             if (a.name > b.name) return dir
+            return -dir
+          }
+          if (sortingField === 'role') {
+            if (a.role > b.role) return dir
             return -dir
           }
           if (sortingField === 'date') {
@@ -82,7 +88,7 @@ export default function ManageUsers({ modeChange }: TManageUsersProps) {
   const handleUserDelete = (id: number) => () => {
     const user = users.find(item => item.id === id)
     if (user) {
-      // Modal.show(<UserDelete user={user} onSuccess={tableUptate} />)
+      Modal.show(<UserDelete user={user} onSuccess={tableUptate} />)
     }
   }
 
@@ -113,6 +119,10 @@ export default function ManageUsers({ modeChange }: TManageUsersProps) {
               Name
               {getDirection('name')}
             </th>
+            <th onClick={() => setSorting(prev => (prev === 'role_desc' ? 'role_asc' : 'role_desc'))}>
+              Role
+              {getDirection('role')}
+            </th>
             <th onClick={() => setSorting(prev => (prev === 'date_desc' ? 'date_asc' : 'date_desc'))}>
               Created
               {getDirection('date')}
@@ -129,6 +139,7 @@ export default function ManageUsers({ modeChange }: TManageUsersProps) {
             <tr key={user.id}>
               <td>{user.id}</td>
               <td>{user.name}</td>
+              <td>{user.role}</td>
               <td>{user.created_at.slice(0, 10)}</td>
               <td>{user.created_by}</td>
               <td className="table__manage">

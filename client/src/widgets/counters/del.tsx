@@ -19,7 +19,7 @@ export default function CounterDelete({ counter, onSuccess }: { counter: TCounte
 
   return (
     <>
-      <h3>Edit counter</h3>
+      <h3>Delete counter</h3>
       <div className="form">
         <p>
           Are you sure you want to delete counter <span style={{ color: 'red' }}>{counter.name}</span>?

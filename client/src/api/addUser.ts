@@ -1,10 +1,10 @@
-import { TCounter } from './types.ts'
+import { TUser, TUserRole } from './types.ts'
 
-export async function addCounter(
-  data: { name: string; value: string },
-): Promise<{ counter?: TCounter; error?: string }> {
+export async function addUser(
+  data: { name: string; password: string; email: string; role: TUserRole },
+): Promise<{ user?: TUser; error?: string }> {
   try {
-    const res = await fetch('/api/counter', {
+    const res = await fetch('/api/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export async function addCounter(
       return { error: await res.text() }
     }
 
-    return { counter: await res.json() }
+    return { user: await res.json() }
   } catch (error) {
     return { error: error instanceof Error ? error.message : String(error) }
   }

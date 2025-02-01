@@ -4,6 +4,8 @@ import performLogin from '~/server/routes/login.ts'
 import {resSrcFiles, resPageAdmin, resFavicon} from './client/routes/index.ts'
 import getCounters from './server/routes/getCounters.ts'
 import getUsers from './server/routes/getUsers.ts'
+import addUser from '~/server/routes/addUser.ts'
+import delUser from '~/server/routes/delUser.ts'
 import addCounter from '~/server/routes/addCounter.ts'
 import editCounter from '~/server/routes/editCounter.ts'
 import delCounter from '~/server/routes/delCounter.ts'
@@ -21,16 +23,21 @@ app.use((_req: Request, res: Response, next: Next) => {
   res.header('Access-Control-Allow-Origin', '*')
   next()
 })
+// Page
 app.get('/', resPageAdmin)
 app.get('/favicon.ico', resFavicon)
 app.get('/src/*', resSrcFiles)
 app.get('/:name', performCounter)
 app.post('/api/login', performLogin)
+// Counters
 app.get('/api/counters', getCounters)
 app.post('/api/counter', authMiddleware(), addCounter)
 app.put('/api/counter/:id', authMiddleware(), editCounter)
 app.delete('/api/counter/:id', authMiddleware(), delCounter)
+// Users
 app.get('/api/users', authMiddleware(['admin']), getUsers)
+app.post('/api/user', authMiddleware(['admin']), addUser)
+app.delete('/api/user/:id', authMiddleware(['admin']), delUser)
 
 app.listen(PORT, () => {
   checkTables()
