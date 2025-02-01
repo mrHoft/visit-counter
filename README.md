@@ -26,7 +26,7 @@ Featured:
 2. cp .env.example .env
 3. `deno task start`: to start express server on 3082 port.
 4. Counter: `localhost:3082/<conter-name>/?type=badge&title=Counter&color=red`.
-5. Admin panel: `localhost:3082/admin`.
+5. Admin panel: `localhost:3082`.
 
 ### Counter optional query parameters:
 - type: 'badge' | 'number' | 'classic'

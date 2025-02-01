@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import db from '~/server/utils/pool.ts'
-import { type TUsersTableSchema } from '~/server/db/types.ts'
+import { TUserRole, type TUsersTableSchema } from '~/server/db/types.ts'
 import { getCookieByKey } from '~/client/utils/cookie.ts'
 
 const getAuthState = async (cookie?: string) => {
@@ -18,13 +18,18 @@ const getAuthState = async (cookie?: string) => {
   }
 }
 
-const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+const authMiddleware = (roles?: TUserRole[]) => async (req: Request, res: Response, next: NextFunction) => {
   const { cookie } = req.headers
   const user = await getAuthState(cookie)
   if (!user) {
     res.status(401).end('Unauthorized')
     return
   }
+  if (roles && !roles.includes(user.role)) {
+    res.status(403).end('Forbidden')
+    return
+  }
+
   req.user = user
   return next()
 }
