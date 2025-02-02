@@ -90,7 +90,9 @@ main {
   max-width: 480px;
   margin: 2rem 1rem 0;
   border-top: 2px solid var(--color50);
-  text-align: center;
+  display: flex;
+  column-gap: 1rem;
+  justify-content: center;
 }
 
 .page {

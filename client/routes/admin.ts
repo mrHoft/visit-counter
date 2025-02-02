@@ -6,7 +6,8 @@ import { ReactDomServer } from '~/client/utils/deps.ts'
 import App from '~/client/src/app.tsx'
 import { getCookieByKey } from '~/client/utils/cookie.ts'
 import db from '~/server/utils/pool.ts'
-import { TUser } from '~/client/src/api/types.ts'
+import { type TUser } from '~/client/src/api/types.ts'
+import getVersion from '~/client/utils/version.ts'
 
 const getAuthState = async (cookie?: string) => {
   if (cookie) {
@@ -37,7 +38,7 @@ const getStats = async () => {
 export default async function resPageAdmin(req: Request, res: Response) {
   const { cookie, host } = req.headers
   const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
-  const stats = { ...await getStats(), host, ip }
+  const stats = { ...await getStats(), host, ip, version: getVersion() }
   const user = await getAuthState(cookie)
   console.log(`Admin page request from ${user ? user.name : 'unknown user'} ${ip} (${host})`)
 

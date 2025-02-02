@@ -20,7 +20,7 @@ class DB {
   private _client: Client | null = null
 
   constructor() {
-    this.pool.on('error', err => {
+    this.pool.on('error', (err) => {
       console.error('Unexpected error on idle client', err)
       this.pool.end()
     })
@@ -30,7 +30,6 @@ class DB {
         `\x1b[33m  → 🚀Connection to \x1b[96m${config.database}\x1b[33m has been established successfully.\x1b[0m`,
       )
     })
- */
     this.pool.on('remove', () => {
       console.log(`\x1b[33m  → 🚀Connection to \x1b[96m${config.database}\x1b[33m has been removed.\x1b[0m`)
     })
@@ -38,11 +37,12 @@ class DB {
     this.pool.on('acquire', () => {
       console.log(`\x1b[33m  → 🚀Connection to \x1b[96m${config.database}\x1b[33m has been acquired.\x1b[0m`)
     })
+    */
   }
 
   get client() {
     if (this._client) Promise.resolve(this._client)
-    return this.pool.connect().then(client => {
+    return this.pool.connect().then((client) => {
       this._client = client
       return client
     })

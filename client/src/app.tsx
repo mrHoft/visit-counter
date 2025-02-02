@@ -36,7 +36,7 @@ export default function App({ server, initialUser }: { server?: boolean; initial
         {mode === 'users' && <ManageUsers modeChange={setMode} />}
         {mode === 'analytics' && <Analytics modeChange={setMode} />}
       </main>
-      <Footer />
+      <Footer server={server} />
       <Modal />
       <Message />
     </>
