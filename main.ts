@@ -31,7 +31,7 @@ app.get('/src/*', resSrcFiles)
 app.get('/:name', performCounter)
 app.post('/api/login', performLogin)
 // Counters
-app.get('/api/counters', getCounters)
+app.get('/api/counters', authMiddleware(), getCounters)
 app.post('/api/counter', authMiddleware(), addCounter)
 app.put('/api/counter/:id', authMiddleware(), editCounter)
 app.delete('/api/counter/:id', authMiddleware(), delCounter)

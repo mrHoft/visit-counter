@@ -5,7 +5,8 @@ import { type TCountersTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/log/request.ts'
 
 const getCounters = (req: Request, res: Response) => {
-  requestLog('Get counters', req)
+  const { name } = req.user!
+  requestLog('Get counters', req, name)
 
   db.pool.query<TCountersTableSchema>('SELECT * FROM counters;').then(({ rows }) => {
     res.status(200).json(rows)

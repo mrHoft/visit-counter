@@ -5,10 +5,10 @@ import { type TCountersTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/log/request.ts'
 
 const editCounter = (req: Request<{ id: number }, unknown, { name: string; value: string }>, res: Response) => {
-  requestLog('Edit counter', req)
   const { id } = req.params
   const { name, value } = req.body
   const { name: createdBy } = req.user!
+  requestLog('Edit counter', req, createdBy)
 
   if (name.length < 3 || value.length < 1) {
     return res.status(403).end('Wrong counter details')

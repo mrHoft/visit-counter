@@ -5,8 +5,9 @@ import { type TUsersTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/log/request.ts'
 
 const delUser = (req: Request<{ id: number }>, res: Response) => {
-  requestLog('Delete user', req)
   const { id } = req.params
+  const { name } = req.user!
+  requestLog('Delete user', req, name)
 
   db.pool.query<TUsersTableSchema>(
     'DELETE FROM users WHERE id = $1 RETURNING *;',

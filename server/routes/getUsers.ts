@@ -5,7 +5,8 @@ import { type TUsersTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/log/request.ts'
 
 const getUsers = (req: Request, res: Response) => {
-  requestLog('Get users', req)
+  const { name } = req.user!
+  requestLog('Get users', req, name)
 
   db.pool.query<TUsersTableSchema>('SELECT * FROM users;').then(({ rows }) => {
     res.status(200).json(rows)

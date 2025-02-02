@@ -5,8 +5,9 @@ import { type TCountersTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/log/request.ts'
 
 const delCounter = (req: Request<{ id: number }>, res: Response) => {
-  requestLog('Delete counter', req)
   const { id } = req.params
+  const { name } = req.user!
+  requestLog('Delete counter', req, name)
 
   db.pool.query<TCountersTableSchema>(
     'DELETE FROM counters WHERE id = $1 RETURNING *;',

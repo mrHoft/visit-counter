@@ -8,10 +8,10 @@ import { createUserToken } from '~/server/utils/users.ts'
 type TPayload = { name: string; password?: string; email: string; role: TUserRole }
 
 const editUser = async (req: Request<{ id: number }, unknown, TPayload>, res: Response) => {
-  requestLog('Edit user', req)
   const { id } = req.params
   const { name, password, email, role } = req.body
   const { name: createdBy } = req.user!
+  requestLog('Edit user', req, createdBy)
 
   if (name.length < 3) {
     return res.status(403).end('Wrong user details')

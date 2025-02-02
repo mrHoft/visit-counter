@@ -6,9 +6,9 @@ import { ERROR_CODES } from '~/server/db/codes.ts'
 import requestLog from '~/server/log/request.ts'
 
 const addCounter = (req: Request<unknown, unknown, { name: string; value: string }>, res: Response) => {
-  requestLog('Add counter', req)
   const { name, value } = req.body
   const { name: createdBy } = req.user!
+  requestLog('Add counter', req, createdBy)
 
   if (name.length < 3 || value.length < 1) {
     return res.status(403).end('Wrong counter details')
