@@ -103,13 +103,14 @@ main {
   align-items: center;
 }
 
-ul {
+.ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-a {
+a,
+.link {
   color: var(--link-color);
   text-decoration: none;
   transition-duration: 250ms;

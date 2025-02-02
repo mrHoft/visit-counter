@@ -3,8 +3,11 @@ import Input from '../ui/input.tsx'
 import { ButtonSubmit } from '../ui/button.tsx'
 import { login } from '../api/login.ts'
 import storeUser from '../entities/user.ts'
+import { type TMode } from './menu.tsx'
 
-export default function LoginForm({ server }: { server?: boolean }) {
+type TLoginFormProps = { server?: boolean; modeChange: (mode: TMode) => void }
+
+export default function LoginForm({ server, modeChange }: TLoginFormProps) {
   const [error, setError] = server ? [null, () => {}] : React.useState<string | null>(null)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -18,6 +21,7 @@ export default function LoginForm({ server }: { server?: boolean }) {
       else {
         setError(null)
         storeUser.user = { ...data! }
+        modeChange('menu')
       }
     })
   }
