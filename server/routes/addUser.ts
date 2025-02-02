@@ -6,10 +6,9 @@ import { ERROR_CODES } from '~/server/db/codes.ts'
 import requestLog from '~/server/log/request.ts'
 import { createUserToken } from '~/server/utils/users.ts'
 
-const addUser = async (
-  req: Request<unknown, unknown, { name: string; password: string; email: string; role: TUserRole }>,
-  res: Response,
-) => {
+type TPayload = { name: string; password: string; email: string; role: TUserRole }
+
+const addUser = async (req: Request<{ id: number }, unknown, TPayload>, res: Response) => {
   requestLog('Add user', req)
   const { name, password, email, role } = req.body
   const { name: createdBy } = req.user!

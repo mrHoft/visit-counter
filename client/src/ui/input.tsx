@@ -5,11 +5,9 @@ export type TInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onC
   name: string
   placeholder: string
   defaultValue?: string | number
-  value?: string | number
   required?: boolean
   disabled?: boolean
   minLength?: number
-  autoComplete?: string
   pattern?: string
   title?: string
   readonly?: boolean
@@ -25,11 +23,9 @@ const Input = React.forwardRef<HTMLInputElement, TInputProps>(
       name,
       placeholder,
       defaultValue,
-      value,
       required,
       disabled,
       minLength,
-      autoComplete,
       pattern,
       title,
       readonly,
@@ -58,9 +54,8 @@ const Input = React.forwardRef<HTMLInputElement, TInputProps>(
           id={`form_${name}`}
           placeholder=" "
           minLength={minLength}
-          autoComplete={autoComplete}
+          autoComplete="false"
           defaultValue={defaultValue}
-          value={value}
           required={required ?? false}
           disabled={disabled}
           pattern={pattern}

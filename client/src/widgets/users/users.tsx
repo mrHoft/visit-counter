@@ -5,8 +5,7 @@ import type { TUser } from '../../api/types.ts'
 import { getUsers } from '../../api/getUsers.ts'
 import { ButtonDel } from '../../ui/squareDel.tsx'
 import { ButtonEdit } from '../../ui/squareEdit.tsx'
-import UserAdd from './add.tsx'
-// import UserEdit from './edit.tsx'
+import UserManage from './manage.tsx'
 import UserDelete from './del.tsx'
 import Modal from '../modal.tsx'
 import storeStats from '../../entities/stats.ts'
@@ -75,13 +74,13 @@ export default function ManageUsers({ modeChange }: TManageUsersProps) {
   }
 
   const handleUserAdd = () => {
-    Modal.show(<UserAdd onSuccess={tableUptate} />)
+    Modal.show(<UserManage onSuccess={tableUptate} />)
   }
 
   const handleUserEdit = (id: number) => () => {
     const user = users.find(item => item.id === id)
     if (user) {
-      // Modal.show(<UserEdit user={user} onSuccess={tableUptate} />)
+      Modal.show(<UserManage user={user} onSuccess={tableUptate} />)
     }
   }
 

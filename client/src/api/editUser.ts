@@ -1,13 +1,13 @@
 import { TUser, TUserRole } from './types.ts'
 
-type TUserPayload = { name: string; password?: string; email: string; role: TUserRole }
+type TUserPayload = { id?: number; name: string; password?: string; email: string; role: TUserRole }
 
-export async function addUser(data: TUserPayload): Promise<{ user?: TUser; error?: string }> {
-  if (!data.password) return { error: 'Password is required' }
+export async function editUser(data: TUserPayload): Promise<{ user?: TUser; error?: string }> {
+  if (!data.id) return { error: 'User ID is required' }
 
   try {
-    const res = await fetch('/api/user', {
-      method: 'POST',
+    const res = await fetch(`/api/user/${data.id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
