@@ -2,7 +2,7 @@ import { React } from '../../../utils/deps.ts'
 import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Input from '../../ui/input.tsx'
 import Modal from '../modal.tsx'
-import { editCounter } from '../../api/editCounter.ts'
+import { counterApi } from '../../api/counter.ts'
 import type { TCounter } from '../../api/types.ts'
 import Message from '../../widgets/message.tsx'
 
@@ -13,7 +13,7 @@ export default function CounterEdit({ counter, onSuccess }: { counter: TCounter;
     const formData = new FormData(el)
     const data = { id: counter.id, name: formData.get('name')!.toString(), value: formData.get('value')!.toString() }
 
-    editCounter(data).then(({ error }) => {
+    counterApi.edit(data).then(({ error }) => {
       if (error) {
         Message.show(error, 'error')
         return

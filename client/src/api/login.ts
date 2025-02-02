@@ -1,23 +1,6 @@
-import { TUser } from './types.ts'
+import { fetcher } from './fetcher.ts'
+import { type TUser } from './types.ts'
 
-export async function login(
-  { name, password }: { name: string; password: string },
-): Promise<{ user?: TUser; error?: string }> {
-  try {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, password }),
-    })
-
-    if (res.status !== 200) {
-      return { error: await res.text() }
-    }
-
-    return { user: await res.json() }
-  } catch (error) {
-    return { error: error instanceof Error ? error.message : String(error) }
-  }
+export function login(data: { name: string; password: string }) {
+  return fetcher<TUser>({ url: '/api/login', method: 'POST', data })
 }

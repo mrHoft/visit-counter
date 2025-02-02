@@ -2,7 +2,7 @@ import { React } from '../../../utils/deps.ts'
 import { ButtonSecondary } from '../../ui/button.tsx'
 import type { TMode } from '../menu.tsx'
 import type { TUser } from '../../api/types.ts'
-import { getUsers } from '../../api/getUsers.ts'
+import { userApi } from '../../api/user.ts'
 import { ButtonDel } from '../../ui/squareDel.tsx'
 import { ButtonEdit } from '../../ui/squareEdit.tsx'
 import UserManage from './manage.tsx'
@@ -62,11 +62,12 @@ export default function ManageUsers({ modeChange }: TManageUsersProps) {
 
   const tableUptate = () => {
     setLoading(true)
-    getUsers()
-      .then(({ users, error }) => {
-        if (users) {
-          setUsers(users)
-          storeStats.stats = { ...storeStats.stats, users: users.length }
+    userApi
+      .get()
+      .then(({ data, error }) => {
+        if (data) {
+          setUsers(data)
+          storeStats.stats = { ...storeStats.stats, users: data.length }
         }
         if (error) Message.show(error, 'error')
       })

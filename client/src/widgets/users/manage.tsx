@@ -3,8 +3,7 @@ import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Input from '../../ui/input.tsx'
 import Select from '../../ui/select.tsx'
 import Modal from '../modal.tsx'
-import { addUser } from '../../api/addUser.ts'
-import { editUser } from '../../api/editUser.ts'
+import { userApi } from '../../api/user.ts'
 import { type TUser, type TUserRole } from '../../api/types.ts'
 import Message from '../message.tsx'
 
@@ -33,7 +32,7 @@ export default function UserManage({ user, onSuccess }: TUserManageProps) {
       role: formData.get('role') as TUserRole,
     }
 
-    const api = editMode ? editUser : addUser
+    const api = editMode ? userApi.edit : userApi.add
     api(data).then(({ error }) => {
       if (error) {
         Message.show(error, 'error')

@@ -1,13 +1,13 @@
 import { React } from '../../../utils/deps.ts'
 import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Modal from '../modal.tsx'
-import { delCounter } from '../../api/delCounter.ts'
+import { counterApi } from '../../api/counter.ts'
 import type { TCounter } from '../../api/types.ts'
 import Message from '../../widgets/message.tsx'
 
 export default function CounterDelete({ counter, onSuccess }: { counter: TCounter; onSuccess?: () => void }) {
   const handleSubmit = () => {
-    delCounter({ id: counter.id }).then(({ error }) => {
+    counterApi.del({ id: counter.id }).then(({ error }) => {
       if (error) {
         Message.show(error, 'error')
         return

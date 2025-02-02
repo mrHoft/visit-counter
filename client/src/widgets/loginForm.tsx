@@ -13,11 +13,11 @@ export default function LoginForm({ server }: { server?: boolean }) {
     const formData = new FormData(el)
     const data = { name: formData.get('name')!.toString(), password: formData.get('password')!.toString() }
 
-    login(data).then(({ user, error }) => {
+    login(data).then(({ data, error }) => {
       if (error) setError(error)
       else {
         setError(null)
-        storeUser.user = { ...user! }
+        storeUser.user = { ...data! }
       }
     })
   }

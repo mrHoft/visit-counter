@@ -1,13 +1,13 @@
 import { React } from '../../../utils/deps.ts'
 import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Modal from '../modal.tsx'
-import { delUser } from '../../api/delUser.ts'
+import { userApi } from '../../api/user.ts'
 import type { TUser } from '../../api/types.ts'
 import Message from '../../widgets/message.tsx'
 
 export default function UserDelete({ user, onSuccess }: { user: TUser; onSuccess?: () => void }) {
   const handleSubmit = () => {
-    delUser({ id: user.id }).then(({ error }) => {
+    userApi.del({ id: user.id }).then(({ error }) => {
       if (error) {
         Message.show(error, 'error')
         return

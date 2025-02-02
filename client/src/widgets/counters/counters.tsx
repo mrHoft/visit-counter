@@ -2,7 +2,7 @@ import { React } from '../../../utils/deps.ts'
 import { ButtonSecondary } from '../../ui/button.tsx'
 import type { TMode } from '../menu.tsx'
 import type { TCounter } from '../../api/types.ts'
-import { getCounters } from '../../api/getCounters.ts'
+import { counterApi } from '../../api/counter.ts'
 import { ButtonDel } from '../../ui/squareDel.tsx'
 import { ButtonEdit } from '../../ui/squareEdit.tsx'
 import CounterAdd from './add.tsx'
@@ -63,12 +63,13 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
 
   const tableUptate = () => {
     setLoading(true)
-    getCounters()
-      .then(({ counters, error }) => {
-        if (counters) {
-          setCounters(counters)
-          const requests = counters.reduce((acc, counter) => acc + counter.value, 0)
-          storeStats.stats = { ...storeStats.stats, counters: counters.length, requests }
+    counterApi
+      .get()
+      .then(({ data, error }) => {
+        if (data) {
+          setCounters(data)
+          const requests = data.reduce((acc, counter) => acc + counter.value, 0)
+          storeStats.stats = { ...storeStats.stats, counters: data.length, requests }
         }
         if (error) Message.show(error, 'error')
       })
