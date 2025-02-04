@@ -1,0 +1,14 @@
+{
+  "name": "Visit counter",
+  "short_name": "Counter",
+  "start_url": "/",
+  "description": "Admin panel",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/public/logo.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, Next } from 'express'
 import performCounter from '~/server/routes/counter.ts'
 import performLogin from '~/server/routes/login.ts'
-import {resSrcFiles, resPageAdmin, resFavicon} from './client/routes/index.ts'
+import {resSrcFiles, resPublicFiles, resPageAdmin, resFavicon} from './client/routes/index.ts'
 import getCounters from './server/routes/getCounters.ts'
 import getUsers from './server/routes/getUsers.ts'
 import addUser from '~/server/routes/addUser.ts'
@@ -28,6 +28,7 @@ app.use((_req: Request, res: Response, next: Next) => {
 app.get('/', resPageAdmin)
 app.get('/favicon.ico', resFavicon)
 app.get('/src/*', resSrcFiles)
+app.get('/public/*', resPublicFiles)
 app.get('/:name', performCounter)
 app.post('/api/login', performLogin)
 // Counters
