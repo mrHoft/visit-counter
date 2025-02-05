@@ -3,6 +3,7 @@ import App from './app.tsx'
 import type { TUser } from './api/types.ts'
 import storeUser from './entities/user.ts'
 import storeStats, { type TStats } from './entities/stats.ts'
+import { scribe } from './scribe.ts'
 
 declare global {
   // deno-lint-ignore no-var
@@ -12,6 +13,7 @@ declare global {
 }
 
 if (typeof document !== 'undefined') {
+  console.log(scribe)
   const root = document.getElementById('app')
   if (root) {
     ReactDomClient.hydrateRoot(root, <App initialUser={globalThis.__INITIAL_USER__} />)
