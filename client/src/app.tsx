@@ -7,7 +7,7 @@ import storeUser from './entities/user.ts'
 import MainMenu, { type TMode } from './widgets/menu.tsx'
 import ManageCounters from './widgets/counters/counters.tsx'
 import ManageUsers from './widgets/users/users.tsx'
-import Analytics from './widgets/analytics.tsx'
+import PageAnalytics from './widgets/analytics/page.tsx'
 import About from './widgets/about.tsx'
 import Modal from './widgets/modal.tsx'
 import Message from './widgets/message.tsx'
@@ -28,7 +28,7 @@ export default function App({ server, initialUser }: { server?: boolean; initial
         {mode === 'menu' && <MainMenu user={user!} server={server} modeChange={setMode} />}
         {mode === 'counters' && <ManageCounters modeChange={setMode} />}
         {mode === 'users' && <ManageUsers modeChange={setMode} />}
-        {mode === 'analytics' && <Analytics modeChange={setMode} />}
+        {mode === 'analytics' && <PageAnalytics modeChange={setMode} />}
         {mode === 'about' && <About modeChange={setMode} />}
       </main>
       <Footer server={server} />

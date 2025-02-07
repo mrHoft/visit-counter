@@ -33,7 +33,7 @@ app.get('/public/*', resPublicFiles)
 app.post('/api/login', performLogin)
 // Counter
 app.get('/:name', performCounter)
-app.get('/analytics/:name', authMiddleware(), getAnalytics)
+app.get('/api/analytics/:name', authMiddleware(), getAnalytics)
 // Counters
 app.get('/api/counters', authMiddleware(), getCounters)
 app.post('/api/counter', authMiddleware(), addCounter)

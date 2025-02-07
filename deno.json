@@ -1,5 +1,5 @@
 {
-  "version": "0.0.8",
+  "version": "0.0.9",
   "tasks": {
     "dev": "deno run --watch --allow-read --env-file=.env --allow-env --allow-net --unsafely-ignore-certificate-errors main.ts",
     "start": "deno run --allow-read --env-file=.env --allow-env --allow-net --unsafely-ignore-certificate-errors main.ts"
