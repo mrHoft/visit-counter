@@ -1,3 +1,4 @@
+// Counters
 export const initTableCounters = /* sql */ `
 CREATE TABLE IF NOT EXISTS counters (
   id serial PRIMARY KEY,
@@ -11,6 +12,21 @@ CREATE TABLE IF NOT EXISTS counters (
 
 INSERT INTO counters (name) VALUES ('default'), ('counter-example') ON CONFLICT DO NOTHING RETURNING *;`
 
+// Counter
+export const initTableCounter = (name: string) => /* sql */ `
+CREATE TABLE IF NOT EXISTS "${name}" (
+  id serial PRIMARY KEY,
+  timestamp timestamptz NOT NULL DEFAULT now(),
+  ip varchar(25),
+  referer varchar(25),
+  host varchar(25),
+  platform varchar(25),
+  agent varchar(25),
+  title varchar(25),
+  color varchar(25)
+);`
+
+// Users
 export const initTableUsers = /* sql */ `
 DO $$ BEGIN
   CREATE TYPE role AS ENUM ('admin', 'user', 'guest');
@@ -30,6 +46,7 @@ CREATE TABLE IF NOT EXISTS users (
   creator_id int4 NOT NULL DEFAULT 0
 );`
 
+// Triggers
 export const initTriggers = /* sql */ `
 CREATE OR REPLACE FUNCTION on_update()
 RETURNS TRIGGER AS $$

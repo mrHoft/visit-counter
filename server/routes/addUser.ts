@@ -20,7 +20,7 @@ const addUser = async (req: Request<{ id: number }, unknown, TPayload>, res: Res
   const token = await createUserToken(name, password)
 
   db.pool.query<TUsersTableSchema>(
-    'INSERT INTO users (name,email,role,token, created_by) VALUES ($1, $2, $3,$4, $5) RETURNING *;',
+    'INSERT INTO users (name, email, role, token, created_by) VALUES ($1, $2, $3, $4, $5) RETURNING *;',
     [name, email, role, token, createdBy],
   )
     .then(({ rows }) => {

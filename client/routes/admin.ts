@@ -8,6 +8,7 @@ import { getCookieByKey } from '~/client/utils/cookie.ts'
 import db from '~/server/utils/pool.ts'
 import { type TUser } from '~/client/src/api/types.ts'
 import getVersion from '~/client/utils/version.ts'
+import requestLog from '~/server/log/request.ts'
 
 const APP_HOST = Deno.env.get('APP_HOST') ?? 'http://127.0.0.1:3000'
 
@@ -38,11 +39,11 @@ const getStats = async () => {
 }
 
 export default async function resPageAdmin(req: Request, res: Response) {
-  const { cookie, host } = req.headers
+  const { cookie } = req.headers
   const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
   const stats = { ...await getStats(), host: APP_HOST, ip, version: getVersion() }
   const user = await getAuthState(cookie)
-  console.log(`Admin page request from ${user ? user.name : 'unknown user'} ${ip} (${host})`)
+  requestLog('Admin page', req, user?.name)
 
   const template = readFileSync(path.resolve('client/index.html'), 'utf-8')
   const html = ReactDomServer.renderToString(App({ server: true, initialUser: user }))
