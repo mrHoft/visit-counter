@@ -7,15 +7,15 @@ import requestLog from '~/server/log/request.ts'
 import { ERROR_CODES } from '~/server/db/codes.ts'
 import { initTableCounter } from '~/server/db/init.ts'
 
-type TAnalyticsPayload = { req: Request; name: string; title?: string; color?: string }
+type TAnalyticsPayload = { req: Request; name: string; title?: string; color?: string; type?: string }
 type TAnalyticsResponse = Promise<{ meassge?: string; error?: string }>
 
-const addAnalytics = ({ req, name, title, color }: TAnalyticsPayload): TAnalyticsResponse => {
+const addAnalytics = ({ req, name, title, color, type }: TAnalyticsPayload): TAnalyticsResponse => {
   const { ip, referer, host, platform, agent } = getHeaders(req)
   const addAnalyticsRecord = () =>
     db.pool.query(
-      `INSERT INTO "${name}" (ip, referer, host, platform, agent, title, color) VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-      [ip, referer, host, platform, agent, title, color],
+      `INSERT INTO "${name}" (ip, referer, host, platform, agent, title, color, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
+      [ip, referer, host, platform, agent, title, color, type],
     )
 
   return addAnalyticsRecord().then(() => ({ meassge: 'Success!' })).catch((error) => {
@@ -55,7 +55,7 @@ const performCounter = async (
   )
   if (!rows.length) return res.status(404).end(`Counter ${name} not found.`)
 
-  addAnalytics({ req, name, title, color })
+  addAnalytics({ req, name, title, color, type })
 
   const counter = getCounter(rows[0].value, type, title, color)
   res.set({

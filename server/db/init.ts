@@ -10,6 +10,12 @@ CREATE TABLE IF NOT EXISTS counters (
   creator_id int4 NOT NULL DEFAULT 0
 );
 
+DO $$ BEGIN
+  CREATE TYPE counter_type AS ENUM ('badge', 'number', 'classic');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
 INSERT INTO counters (name) VALUES ('default'), ('counter-example') ON CONFLICT DO NOTHING RETURNING *;`
 
 // Counter
@@ -23,7 +29,8 @@ CREATE TABLE IF NOT EXISTS "${name}" (
   platform varchar(25),
   agent varchar(25),
   title varchar(25),
-  color varchar(25)
+  color varchar(25),
+  "type" counter_type
 );`
 
 // Users

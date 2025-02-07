@@ -13,12 +13,13 @@ export type TCounterTableSchema = {
   id: number
   timestamp: string
   ip: string
-  referer: string
+  referer: string | null
   host: string
   platform: string
   agent: string
-  title: string
-  color: string
+  title: string | null
+  color: string | null
+  type: string | null
 }
 
 export type TUserRole = 'admin' | 'user' | 'guest'

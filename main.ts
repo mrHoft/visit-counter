@@ -1,5 +1,6 @@
 import express, { Express, Request, Response, Next } from 'express'
 import performCounter from '~/server/routes/counter.ts'
+import getAnalytics from '~/server/routes/getAnalytics.ts'
 import performLogin from '~/server/routes/login.ts'
 import {resSrcFiles, resPublicFiles, resPageAdmin, resFavicon} from './client/routes/index.ts'
 import getCounters from './server/routes/getCounters.ts'
@@ -29,8 +30,10 @@ app.get('/', resPageAdmin)
 app.get('/favicon.ico', resFavicon)
 app.get('/src/*', resSrcFiles)
 app.get('/public/*', resPublicFiles)
-app.get('/:name', performCounter)
 app.post('/api/login', performLogin)
+// Counter
+app.get('/:name', performCounter)
+app.get('/analytics/:name', authMiddleware(), getAnalytics)
 // Counters
 app.get('/api/counters', authMiddleware(), getCounters)
 app.post('/api/counter', authMiddleware(), addCounter)
