@@ -43,8 +43,15 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            pm2 stop counter
-            cd ~/counter
-            deno install
+            export NODE_VERSION="v22.13.1"
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            export NODE_DIR="$NVM_DIR/versions/node/$NODE_VERSION/bin"
+            export DENO_DIR="$HOME/.deno/bin"
 
-            pm2 start -n counter deno -- task start
+            $NODE_DIR/pm2 stop counter
+            cd ~/counter
+            $DENO_DIR/deno install
+
+            $NODE_DIR/pm2 start -n counter $DENO_DIR/deno -- task start

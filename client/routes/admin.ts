@@ -40,7 +40,8 @@ const getStats = async () => {
 
 export default async function resPageAdmin(req: Request, res: Response) {
   const { cookie } = req.headers
-  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress
+  const ip = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress
+  console.log('ip:', req.headers['x-forwarded-for'], req.socket.remoteAddress)
   const stats = { ...await getStats(), host: APP_HOST, ip, version: getVersion() }
   const user = await getAuthState(cookie)
   requestLog('Admin page', req, user?.name)
