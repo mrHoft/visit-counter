@@ -364,6 +364,66 @@ textarea {
   }
 }
 
+/* Toggle */
+.toggle {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color20);
+  user-select: none;
+}
+
+.toggle input[type='radio'] {
+  display: none;
+}
+
+.toggle__label,
+.toggle__label_experimental {
+  z-index: 1;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.25s linear, background-color 0.25s linear;
+}
+
+.toggle__label:not(:last-of-type),
+.toggle__label_experimental:not(:last-of-type) {
+  border-right: 1px solid var(--color50);
+}
+
+.toggle__label:has(input[type='radio']:checked) {
+  background-color: var(--color40);
+}
+
+.toggle__mark {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: var(--r);
+  bottom: 0;
+  left: var(--l);
+  display: none;
+  background-color: var(--color40);
+  transition: all 0.25s ease-in;
+}
+
+.toggle__label_experimental:has(input[type='radio']:checked) ~ .toggle__mark {
+  display: block;
+}
+
+@media (hover: hover) {
+  .toggle__label:hover {
+    background-color: var(--color20);
+  }
+}
+
 /* Pagination */
 .pagination {
   display: flex;
@@ -556,4 +616,11 @@ td:not(:last-of-type) {
 /* Analytincs */
 .analytincs {
   margin-top: 1rem;
+  width: 100%;
+  max-width: 480px;
+}
+
+.analytincs__total {
+  display: flex;
+  justify-content: space-between;
 }
