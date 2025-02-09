@@ -8,6 +8,7 @@
   [![react](https://img.shields.io/badge/React-18-blue?logo=react)](#)
 
   [![counter](https://counter.daytec.ru/counter-example)](#)
+  [![server](https://github.com/mrHoft/visit-counter/actions/workflows/deploy.yml/badge.svg)](#)
 
 </div>
 
@@ -16,6 +17,7 @@ Visitor counter project for self usage.
 Includes:
 - 3 counter types
 - Admin panel
+- Analytics
 
 Featured:
 - Auto installer of database and app using Docker

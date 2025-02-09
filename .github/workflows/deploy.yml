@@ -13,7 +13,6 @@ jobs:
 
       - name: Create env file
         run: |
-          cd ./apps/server
           touch .env
           echo APP_PORT=3082 >> .env
           echo APP_HOST=${{ secrets.APP_HOST }} >> .env
