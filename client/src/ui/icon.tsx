@@ -47,8 +47,14 @@ export const LogoutIcon = ({ size = 32 }) => (
 )
 
 export const InfoIcon = ({ size = 32 }) => (
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24">
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24">
     <circle fill="none" stroke="#fff" stroke-width="1.5" cx="12" cy="12" r="9" />
     <path fill="#fff" d="M11.2,8.8V7.3h1.6v1.5H11.2z M11.2,15.9V9.7h1.6v6.2H11.2z" />
+  </svg>
+)
+
+export const ArrowUp = ({ size = 16 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="none" viewBox="0 0 10 14">
+    <path stroke="currentColor" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4"></path>
   </svg>
 )
