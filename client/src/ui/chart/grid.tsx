@@ -8,18 +8,12 @@ export const GridChart = ({ data }: { data: Record<string, number> }) => {
   const [gridX, gridY, path1, path2] = React.useMemo(() => {
     const max = Math.max(...Object.values(data))
     const points = Object.keys(data)
-    const dx = width / (points.length - 1)
-    const dy = (height / max) * 0.75
-    const arr = Object.keys(data).map((key, i) => {
-      const x = dx * i
-      const y = height - dy * data[key]
-      return { x, y }
-    })
 
     const gridXLength = Math.min(points.length, 10)
+    const labelFactor = (points.length - 1) / (gridXLength - 1)
     const gridX = Array.from({ length: gridXLength }, (_, i) => ({
-      x: Math.floor(((width - 16) / (gridXLength - 1)) * i) + 12,
-      label: points[Math.ceil(((points.length - 1) / (gridXLength - 1)) * i)],
+      x: Math.floor(((width - 16) / (gridXLength - 1 || 1)) * i) + 12,
+      label: points[Math.ceil(labelFactor * i)] ?? points[0],
     }))
 
     const gridYStep = (height - 2) / (gridLines - 1)
@@ -27,6 +21,15 @@ export const GridChart = ({ data }: { data: Record<string, number> }) => {
       y: Math.floor(i * gridYStep + 1),
       label: (max - (max / (gridLines - 1)) * i).toFixed(0),
     }))
+
+    const dx = width / (points.length - 1 || 1)
+    const dy = (height / max) * 0.75
+    const arr = Object.keys(data).map((key, i) => {
+      const x = dx * i
+      const y = height - dy * data[key]
+      return { x, y }
+    })
+    if (arr.length === 1) arr.push({ x: width, y: arr[0].y })
 
     const path1 = (() => {
       const d = arr.reduce((acc, curr) => {

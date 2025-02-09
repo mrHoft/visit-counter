@@ -9,13 +9,14 @@ import { initTableCounter } from '~/server/db/init.ts'
 
 type TAnalyticsPayload = { req: Request; name: string; title?: string; color?: string; type?: string }
 type TAnalyticsResponse = Promise<{ meassge?: string; error?: string }>
+const defaultCounter = 'badge'
 
 const addAnalytics = ({ req, name, title, color, type }: TAnalyticsPayload): TAnalyticsResponse => {
   const { ip, referer, host, platform, agent } = getHeaders(req)
   const addAnalyticsRecord = () =>
     db.pool.query(
       `INSERT INTO "${name}" (ip, referer, host, platform, agent, title, color, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
-      [ip, referer, host, platform, agent, title, color, type],
+      [ip, referer, host, platform, agent, title, color, type ?? defaultCounter],
     )
 
   return addAnalyticsRecord().then(() => ({ meassge: 'Success!' })).catch((error) => {

@@ -11,7 +11,7 @@ export type TCountersTableSchema = {
 
 export type TCounterTableSchema = {
   id: number
-  timestamp: string
+  created_at: string
   ip: string
   referer: string | null
   host: string

@@ -22,7 +22,7 @@ INSERT INTO counters (name) VALUES ('default'), ('counter-example') ON CONFLICT 
 export const initTableCounter = (name: string) => /* sql */ `
 CREATE TABLE IF NOT EXISTS "${name}" (
   id serial PRIMARY KEY,
-  timestamp timestamptz NOT NULL DEFAULT now(),
+  created_at timestamptz NOT NULL DEFAULT now(),
   ip varchar(25),
   referer varchar(25),
   host varchar(25),

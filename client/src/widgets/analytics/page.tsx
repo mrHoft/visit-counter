@@ -7,13 +7,15 @@ import Message from '../message.tsx'
 import Select from '../../ui/select.tsx'
 import storeUser from '../../entities/user.ts'
 import { statNames, type TStats } from './const.ts'
-import Analytics from './analytics.tsx'
+import AnalyticsCharts from './charts.tsx'
+import AnalyticsGraph from './graph.tsx'
 
 type TAnalyticsProps = { modeChange: (mode: TMode) => void }
 
 export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
   const [counters, setCounters] = React.useState<string[]>([])
-  const [stats, setStats] = React.useState<TStats>({ total: 0, visits: 0 })
+  const [stats, setStats] = React.useState<TStats>({ period: 0, lastMonth: 0, currMonth: 0, total: 0 })
+  const [graph, setGraph] = React.useState<Record<string, number> | null>(null)
   const [loading, setLoading] = React.useState(false)
 
   const getCounters = () => {
@@ -39,10 +41,10 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
       .get(name)
       .then(({ data: response, error }) => {
         if (response) {
-          const { data, total, visits } = response
-          const collect: TStats = { total, visits }
+          const { data, period, lastMonth, currMonth, total } = response
+          const statsData: TStats = { period, lastMonth, currMonth, total }
           for (const stat of statNames) {
-            collect[stat] = data.reduce<Record<string, number>>((acc, row) => {
+            statsData[stat] = data.reduce<Record<string, number>>((acc, row) => {
               const val = row[stat]
               if (val) {
                 acc[val] = acc[val] ? acc[val] + 1 : 1
@@ -50,7 +52,14 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
               return acc
             }, {})
           }
-          setStats(collect)
+          setStats(statsData)
+
+          const graphData = data.reduce<Record<string, number>>((acc, row) => {
+            const timestamp = row.created_at.slice(5, 10)
+            acc[timestamp] = acc[timestamp] ? acc[timestamp] + 1 : 1
+            return acc
+          }, {})
+          setGraph(graphData)
         }
         if (error) Message.show(error, 'error')
       })
@@ -81,7 +90,16 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
           <ButtonSecondary onClick={() => modeChange('menu')}>Back</ButtonSecondary>
         </div>
       </form>
-      <Analytics stats={stats} />
+      {graph && (
+        <AnalyticsGraph
+          data={graph}
+          total={stats.total}
+          period={stats.period}
+          lastMonth={stats.lastMonth}
+          currMonth={stats.currMonth}
+        />
+      )}
+      <AnalyticsCharts stats={stats} />
     </>
   )
 }

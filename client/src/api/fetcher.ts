@@ -17,7 +17,6 @@ export async function fetcher<T>(
   { url, method = 'GET', headers, data }: TFetcherProps,
 ): Promise<{ data?: T; error?: string }> {
   const APP_HOST = storeStats.stats.host
-  console.log(APP_HOST)
 
   const payload: TPayload = {
     method,

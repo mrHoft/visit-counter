@@ -3,8 +3,10 @@ import { type TCounterTableSchema } from '~/server/db/types.ts'
 
 export type TAnalytics = {
   data: TCounterTableSchema[]
+  period: number
+  lastMonth: number
+  currMonth: number
   total: number
-  visits: number
 }
 
 export const analyticsApi = {
