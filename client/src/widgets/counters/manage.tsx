@@ -1,35 +1,28 @@
 import { React } from '../../../utils/deps.ts'
 import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Input from '../../ui/input.tsx'
-import Select from '../../ui/select.tsx'
 import Modal from '../modal.tsx'
-import { userApi } from '../../api/user.ts'
-import { type TUser, type TUserRole } from '../../api/types.ts'
+import { counterApi } from '../../api/counter.ts'
 import Message from '../message.tsx'
+import type { TCounter } from '../../api/types.ts'
 import { PATTERN } from '../const.ts'
 import { isFormElement } from '../../utils/element.ts'
 
-const roles: TUserRole[] = ['admin', 'user', 'guest']
-type TUserManageProps = { user?: TUser; onSuccess?: () => void }
-
-export default function UserManage({ user, onSuccess }: TUserManageProps) {
-  const editMode = Boolean(user)
+export default function CounterManage({ counter, onSuccess }: { counter?: TCounter; onSuccess?: () => void }) {
+  const editMode = Boolean(counter)
   const ref = React.useRef<HTMLFormElement>(null)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const el = event.currentTarget
     const formData = new FormData(el)
-    const password = formData.get('password')
     const data = {
-      id: user?.id,
-      name: formData.get('name')!.toString(),
-      password: password ? password.toString() : undefined,
-      email: formData.get('email')!.toString(),
-      role: formData.get('role') as TUserRole,
+      id: counter?.id,
+      name: formData.get('counter-name')!.toString(),
+      value: formData.get('counter-value')!.toString(),
     }
 
-    const api = editMode ? userApi.edit : userApi.add
+    const api = editMode ? counterApi.edit : counterApi.add
     api(data).then(({ error }) => {
       if (error) {
         Message.show(error, 'error')
@@ -47,19 +40,14 @@ export default function UserManage({ user, onSuccess }: TUserManageProps) {
     for (const el of elements) {
       if (isFormElement<HTMLInputElement | HTMLSelectElement>(el)) {
         switch (el.name) {
-          case 'name': {
-            if (user?.name) el.value = user.name
+          case 'counter-name': {
+            if (counter?.name) el.value = counter.name
             else el.value = ''
             break
           }
-          case 'email': {
-            if (user?.email) el.value = user.email
-            else el.value = ''
-            break
-          }
-          case 'role': {
-            if (user?.role) el.value = user.role
-            else el.value = roles[2]
+          case 'counter-value': {
+            if (counter?.value !== undefined) el.value = counter.value.toString()
+            else el.value = '0'
             break
           }
           default: {
@@ -68,32 +56,30 @@ export default function UserManage({ user, onSuccess }: TUserManageProps) {
         }
       }
     }
-  }, [user])
+  }, [counter])
 
   return (
     <>
-      <h3>{`${editMode ? 'Edit' : 'Add'} user`}</h3>
+      <h3>{`${editMode ? 'Edit' : 'Add'} counter`}</h3>
       <form ref={ref} className="form" onSubmit={handleSubmit}>
         <Input
           type="text"
-          name="name"
-          placeholder="name*"
+          name="counter-name"
+          placeholder="name"
           pattern={PATTERN.name}
           minLength={3}
           maxLength={24}
           required
         />
         <Input
-          type="password"
-          name="password"
-          placeholder={`password${editMode ? '' : '*'}`}
-          pattern={PATTERN.password}
-          minLength={5}
-          maxLength={16}
-          required={!editMode}
+          type="text"
+          name="counter-value"
+          placeholder="starter value"
+          pattern={PATTERN.number}
+          maxLength={5}
+          required
+          defaultValue="0"
         />
-        <Input type="text" name="email" placeholder="email" pattern={PATTERN.email} minLength={6} maxLength={24} />
-        <Select name="role" options={roles} placeholder="role*" defaultValue={user?.role ?? 'guest'} required />
         <div className="flex_wrap" style={{ marginTop: '1rem' }}>
           <ButtonSubmit>Save</ButtonSubmit>
           <ButtonSecondary onClick={() => Modal.close()}>Close</ButtonSecondary>

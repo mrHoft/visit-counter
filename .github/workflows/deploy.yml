@@ -21,6 +21,9 @@ jobs:
           echo PG_DB=counter >> .env
           echo PG_USER=counter >> .env
           echo PG_PWD=${{ secrets.PG_PWD }} >> .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo ADMIN_NAME=${{ secrets.ADMIN_NAME }} >> .env
+          echo ADMIN_PWD=${{ secrets.ADMIN_PWD }} >> .env
 
       - name: Copy files via ssh
         uses: appleboy/scp-action@v0.1.4
@@ -30,7 +33,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           source: '.'
-          target: '~/apps/counter'
+          target: '~/counter'
 
       - name: Executing remote ssh commands
         uses: appleboy/ssh-action@v1.0.0
@@ -41,7 +44,7 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           script: |
             pm2 stop counter
-            cd ~/apps/counter
+            cd ~/counter
             deno install
 
             pm2 start -n counter deno -- task start

@@ -2,7 +2,7 @@
   "version": "0.0.9",
   "tasks": {
     "dev": "deno run --watch --allow-read --env-file=.env --allow-env --allow-net --unsafely-ignore-certificate-errors main.ts",
-    "start": "deno run --allow-read --env-file=.env --allow-env --allow-net --unsafely-ignore-certificate-errors main.ts"
+    "start": "deno run --allow-read --allow-write --env-file=.env --allow-env --allow-net --unsafely-ignore-certificate-errors main.ts"
   },
   "imports": {
     "@cross/jwt": "jsr:@cross/jwt@^0.5.0",

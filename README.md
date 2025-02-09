@@ -8,7 +8,7 @@
   [![react](https://img.shields.io/badge/React-18-blue?logo=react)](#)
 
   [![counter](https://counter.daytec.ru/counter-example)](#)
-  [![server](https://github.com/mrHoft/visit-counter/actions/workflows/deploy.yml/badge.svg)](#)
+  [![server](https://github.com/mrHoft/visit-counter/actions/workflows/deploy.yml/badge.svg)](https://counter.daytec.ru/)
 
 </div>
 

@@ -45,7 +45,6 @@ export default function LoginForm({ server, modeChange }: TLoginFormProps) {
         pattern="^[0-9A-Za-z\\-_#$@&!]+$"
         minLength={5}
         required
-        defaultValue={'admin'}
       />
       <p style={{ color: 'red', height: '1lh', margin: 0 }}>{error}</p>
       <ButtonSubmit>Submit</ButtonSubmit>

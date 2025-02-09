@@ -5,8 +5,7 @@ import type { TCounter } from '../../api/types.ts'
 import { counterApi } from '../../api/counter.ts'
 import { ButtonDel } from '../../ui/squareDel.tsx'
 import { ButtonEdit } from '../../ui/squareEdit.tsx'
-import CounterAdd from './add.tsx'
-import CounterEdit from './edit.tsx'
+import CounterManage from './manage.tsx'
 import CounterDelete from './del.tsx'
 import Modal from '../modal.tsx'
 import storeStats from '../../entities/stats.ts'
@@ -77,13 +76,13 @@ export default function ManageCounters({ modeChange }: TManageCountersProps) {
   }
 
   const handleCounterAdd = () => {
-    Modal.show(<CounterAdd onSuccess={tableUptate} />)
+    Modal.show(<CounterManage onSuccess={tableUptate} />)
   }
 
   const handleCounterEdit = (id: number) => () => {
     const counter = counters.find(item => item.id === id)
     if (counter) {
-      Modal.show(<CounterEdit counter={counter} onSuccess={tableUptate} />)
+      Modal.show(<CounterManage counter={counter} onSuccess={tableUptate} />)
     }
   }
 
