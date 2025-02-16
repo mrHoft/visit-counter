@@ -25,6 +25,7 @@ app.use((_req: Request, res: Response, next: Next) => {
   res.header('Access-Control-Allow-Origin', '*')
   next()
 })
+app.set('trust proxy', true);
 // Page
 app.get('/', resPageAdmin)
 app.get('/favicon.ico', resFavicon)
