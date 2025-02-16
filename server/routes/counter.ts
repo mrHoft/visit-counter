@@ -13,6 +13,12 @@ const defaultCounter = 'badge'
 
 const addAnalytics = ({ req, name, title, color, type }: TAnalyticsPayload): TAnalyticsResponse => {
   const { ip, platform, agent, browser, isMobile } = getHeaders(req)
+
+  console.log({ ip, platform, agent, browser, isMobile })
+  console.log('sec-ch-ua:', req.headers['sec-ch-ua'])
+  console.log('sec-ch-ua-platform:', req.headers['sec-ch-ua-platform'])
+  console.log('user-agent:', req.headers['user-agent'])
+
   const addAnalyticsRecord = () =>
     db.pool.query(
       `INSERT INTO "${name}" (ip, platform, agent, title, color, type) VALUES ($1, $2, $3, $4, $5, $6);`,
