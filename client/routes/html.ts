@@ -9,6 +9,7 @@ import db from '~/server/utils/pool.ts'
 import { type TUser } from '~/client/src/api/types.ts'
 import getVersion from '~/client/utils/version.ts'
 import requestLog from '~/server/log/request.ts'
+import getHeaders from '~/server/utils/getHeaders.ts'
 
 const APP_HOST = Deno.env.get('APP_HOST') ?? 'http://127.0.0.1:3000'
 
@@ -42,10 +43,9 @@ export default async function resPageAdmin(req: Request, res: Response) {
   const { cookie } = req.headers
   const ip = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress
 
-  console.log('X-Real-IP:', req.headers['X-Real-IP'])
-  console.log('x-forwarded-for:', req.headers['x-forwarded-for'])
-  console.log('X-Forwarded-Proto:', req.headers['X-Forwarded-Proto'])
-  console.log('Host:', req.headers['Host'])
+  console.log(getHeaders(req))
+  console.log('sec-ch-ua:', req.headers['sec-ch-ua'])
+  console.log('user-agent:', req.headers['user-agent'])
 
   const stats = { ...await getStats(), host: APP_HOST, ip, version: getVersion() }
   const user = await getAuthState(cookie)

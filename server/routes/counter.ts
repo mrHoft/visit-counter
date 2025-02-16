@@ -12,11 +12,11 @@ type TAnalyticsResponse = Promise<{ meassge?: string; error?: string }>
 const defaultCounter = 'badge'
 
 const addAnalytics = ({ req, name, title, color, type }: TAnalyticsPayload): TAnalyticsResponse => {
-  const { ip, referer, host, platform, agent } = getHeaders(req)
+  const { ip, platform, agent, browser, isMobile } = getHeaders(req)
   const addAnalyticsRecord = () =>
     db.pool.query(
-      `INSERT INTO "${name}" (ip, referer, host, platform, agent, title, color, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
-      [ip, referer, host, platform, agent, title, color, type ?? defaultCounter],
+      `INSERT INTO "${name}" (ip, platform, agent, title, color, type) VALUES ($1, $2, $3, $4, $5, $6);`,
+      [ip, platform, agent, title, color, type ?? defaultCounter],
     )
 
   return addAnalyticsRecord().then(() => ({ meassge: 'Success!' })).catch((error) => {
