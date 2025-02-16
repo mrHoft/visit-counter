@@ -45,6 +45,7 @@ export default async function resPageAdmin(req: Request, res: Response) {
 
   console.log(getHeaders(req))
   console.log('sec-ch-ua:', req.headers['sec-ch-ua'])
+  console.log('sec-ch-ua-platform:', req.headers['sec-ch-ua-platform'])
   console.log('user-agent:', req.headers['user-agent'])
 
   const stats = { ...await getStats(), host: APP_HOST, ip, version: getVersion() }

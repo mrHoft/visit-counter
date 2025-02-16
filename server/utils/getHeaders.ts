@@ -7,7 +7,7 @@ export default function getHeaders(req: Request) {
   const { browser, version, os: platform, isMobile } = getUserAgent(req.headers['user-agent'] as string)
   const agent = (() => {
     const ua = req.headers['sec-ch-ua'] as string
-    return ua.split(',').pop()?.trim().replaceAll('"', '')?.replace(';v=', ' ') || null
+    return ua && ua.split(',').pop()?.trim().replaceAll('"', '')?.replace(';v=', ' ') || null
   })()
 
   return { timestamp, platform, browser: `${browser} ${version}`, isMobile, agent, ip }
