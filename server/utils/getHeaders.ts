@@ -5,10 +5,12 @@ export default function getHeaders(req: Request) {
   const timestamp = new Date().toJSON().slice(0, 19)
   const ip = ((req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress) as string) || null
   const { browser, version, os: platform, isMobile } = getUserAgent(req.headers['user-agent'] as string)
+  const browserAndVersion = browser ? `${browser} ${version ?? ''}` : null
+  /*
   const agent = (() => {
     const ua = req.headers['sec-ch-ua'] as string
     return ua && ua.split(',').pop()?.trim().replaceAll('"', '')?.replace(';v=', ' ') || null
   })()
-
-  return { timestamp, platform, browser: `${browser} ${version}`, isMobile, agent, ip }
+  */
+  return { timestamp, platform, agent: browserAndVersion, isMobile, ip }
 }

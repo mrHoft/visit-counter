@@ -1,3 +1,11 @@
+type TUserAgentValue = {
+  source: string
+  browser: string | null
+  version: string | null
+  os: string | null
+  platform: string | null
+}
+
 class UserAgent {
   private _versions = {
     Edge: /(?:edge|edga|edgios|edg)\/([\d\w\.\-]+)/i,
@@ -105,11 +113,6 @@ class UserAgent {
     iOS: /^ios\-/i,
   }
   private _defaultAgent = {
-    source: '',
-    browser: 'unknown',
-    version: 'unknown',
-    os: 'unknown',
-    platform: 'unknown',
     isYaBrowser: false,
     isAuthoritative: true,
     isMobile: false,
@@ -157,11 +160,14 @@ class UserAgent {
     isElectron: false,
     isWechat: false,
   }
-  public agent: typeof this._defaultAgent
-
-  constructor() {
-    this.agent = { ...this._defaultAgent }
+  private _defaultValue: TUserAgentValue = {
+    source: '',
+    browser: null,
+    version: null,
+    os: null,
+    platform: null,
   }
+  public agent: TUserAgentValue & typeof this._defaultAgent = { ...this._defaultAgent, ...this._defaultValue }
 
   private getBrowser = (s: string) => {
     switch (true) {
@@ -228,7 +234,7 @@ class UserAgent {
         return 'UCBrowser'
       default:
         if (s.indexOf('Dalvik') !== -1) {
-          return 'unknown'
+          return null
         }
 
         // If the UA does not start with Mozilla guess the user agent.
@@ -236,7 +242,7 @@ class UserAgent {
           this.agent.isAuthoritative = false
           return RegExp.$1
         }
-        return 'unknown'
+        return null
     }
   }
 
@@ -333,7 +339,7 @@ class UserAgent {
         }
         break
       default:
-        if (this.agent.browser !== 'unknown') {
+        if (this.agent.browser !== null) {
           const regex = new RegExp(this.agent.browser + '[\\/ ]([\\d\\w\\.\\-]+)', 'i')
           if (regex.test(s)) {
             return RegExp.$1
@@ -343,7 +349,7 @@ class UserAgent {
           if (this.agent.isWebkit && this._versions.WebKit.test(s)) {
             return RegExp.$1
           }
-          return 'unknown'
+          return null
         }
     }
   }
@@ -353,7 +359,7 @@ class UserAgent {
       return RegExp.$1
     }
 
-    return 'unknown'
+    return null
   }
 
   private getOS = (s: string) => {
@@ -475,7 +481,7 @@ class UserAgent {
         this.agent.isElectron = true
         return 'Electron'
       default:
-        return 'unknown'
+        return null
     }
   }
 
@@ -520,7 +526,7 @@ class UserAgent {
       case this._platform.iOS.test(s):
         return 'Apple iOS'
       default:
-        return 'unknown'
+        return null
     }
   }
 
@@ -603,7 +609,7 @@ class UserAgent {
   }
 
   private testWebkit = () => {
-    if (this.agent.browser === 'unknown' && /applewebkit/i.test(this.agent.source)) {
+    if (this.agent.browser === null && /applewebkit/i.test(this.agent.source)) {
       this.agent.browser = 'Apple WebKit'
       this.agent.isWebkit = true
     }
@@ -616,16 +622,18 @@ class UserAgent {
     }
   }
 
-  public reset = () => {
-    const agent = this.agent
-    Object.keys(agent).forEach((key) => {
-      ;(agent as Record<string, unknown>)[key] = this._defaultAgent[key as keyof typeof this._defaultAgent]
-    })
-    return agent
+  private reset = () => {
+    this.agent = { ...this._defaultAgent, ...this._defaultValue }
   }
 
   public parse = (source: string) => {
     this.reset()
+    if (source.includes('github')) {
+      this.agent.os = 'Linux'
+      this.agent.platform = 'GitHub'
+      this.agent.browser = 'GitHub'
+      return this.agent
+    }
     this.agent.source = source.replace(/^\s*/, '').replace(/\s*$/, '')
     this.agent.os = this.getOS(this.agent.source)
     this.agent.platform = this.getPlatform(this.agent.source)
