@@ -7,7 +7,7 @@ const toggleOptions = statNames.map((name: TStatName, id) => ({ id, label: name 
 
 export default function AnalyticsCharts({ stats }: { stats: TStats }) {
   if (stats.total === 0) return null
-  const [stat, setStat] = React.useState<TStatName>('ip')
+  const [stat, setStat] = React.useState<TStatName>('country')
 
   const handleToggle = (id?: number) => {
     if (id !== undefined) {

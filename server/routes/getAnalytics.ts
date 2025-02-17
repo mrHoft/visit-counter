@@ -33,7 +33,21 @@ const getAnalytics = async (req: Request<{ name: string }, unknown, unknown, TAn
   const dateFrom = from ? new Date(from) : new Date(new Date().setMonth(new Date().getMonth() - 1, 1))
   const dateTo = to ? new Date(to) : new Date()
 
-  let query = `SELECT * FROM "${name}" WHERE created_at >= $1 AND created_at <= $2`
+  let query = /* sql */ `SELECT
+    created_at,
+    country,
+    platform,
+    agent,
+    CASE
+      WHEN is_mobile=true THEN 'mobile'
+      WHEN is_mobile=false THEN 'desktop'
+      ELSE NULL
+    END AS "mobile",
+    title,
+    color,
+    "type"
+  FROM "${name}"
+  WHERE created_at BETWEEN $1 AND $2`
   const params: (Date | string)[] = [dateFrom, dateTo]
   if (title) {
     params.push(title)
@@ -48,11 +62,13 @@ const getAnalytics = async (req: Request<{ name: string }, unknown, unknown, TAn
     query = `${query} AND type = $${params.length}`
   }
 
-  const { rows } = await db.pool.query<TCounterTableSchema & { total: number }>(`${query};`, params).catch((err) => {
-    console.log(err.message)
-    return { rows: [] }
+  const { rows, error }: { rows?: TCounterTableSchema[]; error?: string } = await db.pool.query<
+    TCounterTableSchema
+  >(`${query};`, params).catch((err) => {
+    return { error: err.message as string }
   })
-  if (!rows.length) return res.status(404).end(`No analytics for ${name} was found.`)
+  if (error) res.status(500).end(error)
+  if (!rows || !rows.length) return res.status(404).end(`No analytics for ${name} was found.`)
 
   const total = await getVisits(name)
   const lastMonth = await getPeriod(

@@ -6,23 +6,25 @@ import db from '~/server/utils/pool.ts'
 import requestLog from '~/server/log/request.ts'
 import { ERROR_CODES } from '~/server/db/codes.ts'
 import { initTableCounter } from '~/server/db/init.ts'
+import geoIP from '~/server/utils/geoip.ts'
 
 type TAnalyticsPayload = { req: Request; name: string; title?: string; color?: string; type?: string }
 type TAnalyticsResponse = Promise<{ meassge?: string; error?: string }>
 const defaultCounter = 'badge'
 
 const addAnalytics = ({ req, name, title, color, type }: TAnalyticsPayload): TAnalyticsResponse => {
-  const { ip, platform, agent } = getHeaders(req)
+  const { ip, platform, agent, isMobile } = getHeaders(req)
+  const { country } = ip ? geoIP(ip) : { country: null }
 
   const addAnalyticsRecord = () =>
     db.pool.query(
-      `INSERT INTO "${name}" (ip, platform, agent, title, color, type) VALUES ($1, $2, $3, $4, $5, $6);`,
-      [ip, platform, agent, title, color, type ?? defaultCounter],
+      `INSERT INTO "${name}" (ip, country, platform, agent, is_mobile, title, color, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`,
+      [ip, country, platform, agent, isMobile, title, color, type ?? defaultCounter],
     )
 
   return addAnalyticsRecord().then(() => ({ meassge: 'Success!' })).catch((error) => {
     if (error.code === ERROR_CODES.relation) {
-      console.log(`No \x1b[33m${name}\x1b[0m table found: creating one...`)
+      console.log(`No \x1b[33m${name}\x1b[0m table found: creating...`)
       return db.pool.query(initTableCounter(name)).then(() =>
         addAnalyticsRecord().then(() => ({ meassge: 'Success!' })).catch((err) => {
           console.log(`Adding analytics to \x1b[33m${name}\x1b[0m table: Failed:`, err.message)

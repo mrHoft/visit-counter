@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS "${name}" (
   id serial PRIMARY KEY,
   created_at timestamptz NOT NULL DEFAULT now(),
   ip varchar(25),
-  referer varchar(25),
-  host varchar(25),
+  country varchar(8),
   platform varchar(25),
   agent varchar(25),
+  is_mobile boolean,
   title varchar(25),
   color varchar(25),
   "type" counter_type

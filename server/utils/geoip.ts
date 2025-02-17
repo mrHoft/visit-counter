@@ -26,7 +26,7 @@ type TConf4 = {
   mainBuffer: Buffer | null
   recordSize: number
 }
-type TGeoIP = { country: string }
+type TGeoIP = { country: string | null }
 
 class GeoIP {
   private RECORD_SIZE = 10
@@ -107,12 +107,12 @@ class GeoIP {
 
   public lookup = (ip: string) => {
     if (!ip) {
-      return null
+      return { country: null }
     } else if (isIP(ip) === 4) {
-      return this.lookup4(utils.ipToN4(ip)) ?? null
+      return this.lookup4(utils.ipToN4(ip)) ?? { country: null }
     }
 
-    return null
+    return { country: null }
   }
 }
 
