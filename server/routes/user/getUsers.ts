@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 import db from '~/server/utils/pool.ts'
 import { type TUsersTableSchema } from '~/server/db/types.ts'
-import requestLog from '~/server/log/request.ts'
+import requestLog from '~/server/utils/log.ts'
 
 const getUsers = (req: Request, res: Response) => {
   const { name } = req.user!

@@ -1,5 +1,5 @@
 import db from '~/server/utils/pool.ts'
-import { createAdminUserToken } from '~/server/utils/users.ts'
+import { createAdminUserToken } from '~/server/utils/token.ts'
 import { ERROR_CODES } from '~/server/db/codes.ts'
 import { initTableCounters, initTableUsers, initTriggers } from '~/server/db/init.ts'
 

@@ -8,7 +8,7 @@ import { getCookieByKey } from '~/client/utils/cookie.ts'
 import db from '~/server/utils/pool.ts'
 import { type TUser } from '~/client/src/api/types.ts'
 import getVersion from '~/client/utils/version.ts'
-import requestLog from '~/server/log/request.ts'
+import requestLog from '~/server/utils/log.ts'
 
 const APP_HOST = Deno.env.get('APP_HOST') ?? 'http://127.0.0.1:3000'
 

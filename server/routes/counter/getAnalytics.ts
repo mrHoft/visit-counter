@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { type TCounterType } from '~/server/template/counter.ts'
 import { type TCounterTableSchema } from '~/server/db/types.ts'
 import db from '~/server/utils/pool.ts'
-import requestLog from '~/server/log/request.ts'
+import requestLog from '~/server/utils/log.ts'
 
 const getVisits = async (counterName: string) => {
   return (await db.pool.query<{ value: number }>(`SELECT value FROM counters WHERE name = '${counterName}';`)).rows[0]

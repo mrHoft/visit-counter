@@ -1,0 +1,5 @@
+export { default as addUser } from '~/server/routes/user/addUser.ts'
+export { default as delUser } from '~/server/routes/user/delUser.ts'
+export { default as editUser } from '~/server/routes/user/editUser.ts'
+export { default as getUsers } from '~/server/routes/user/getUsers.ts'
+export { default as performLogin } from '~/server/routes/user/login.ts'

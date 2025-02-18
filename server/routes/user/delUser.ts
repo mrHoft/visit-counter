@@ -1,16 +1,16 @@
 // @deno-types="npm:@types/express@5"
 import { Request, Response } from 'express'
 import db from '~/server/utils/pool.ts'
-import { type TCountersTableSchema } from '~/server/db/types.ts'
-import requestLog from '~/server/log/request.ts'
+import { type TUsersTableSchema } from '~/server/db/types.ts'
+import requestLog from '~/server/utils/log.ts'
 
-const delCounter = (req: Request<{ id: number }>, res: Response) => {
+const delUser = (req: Request<{ id: number }>, res: Response) => {
   const { id } = req.params
   const { name } = req.user!
-  requestLog('Delete counter', req, name)
+  requestLog('Delete user', req, name)
 
-  db.pool.query<TCountersTableSchema>(
-    'DELETE FROM counters WHERE id = $1 RETURNING *;',
+  db.pool.query<TUsersTableSchema>(
+    'DELETE FROM users WHERE id = $1 RETURNING *;',
     [id],
   )
     .then(({ rows }) => {
@@ -21,4 +21,4 @@ const delCounter = (req: Request<{ id: number }>, res: Response) => {
     })
 }
 
-export default delCounter
+export default delUser

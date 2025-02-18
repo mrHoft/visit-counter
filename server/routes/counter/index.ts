@@ -1,0 +1,6 @@
+export { default as addCounter } from '~/server/routes/counter/addCounter.ts'
+export { default as performCounter } from '~/server/routes/counter/counter.ts'
+export { default as delCounter } from '~/server/routes/counter/delCounter.ts'
+export { default as editCounter } from '~/server/routes/counter/editCounter.ts'
+export { default as getAnalytics } from '~/server/routes/counter/getAnalytics.ts'
+export { default as getCounters } from '~/server/routes/counter/getCounters.ts'

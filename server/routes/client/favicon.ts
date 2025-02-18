@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 
-export default function resFavicon(req: Request, res: Response) {
+export default function resFavicon(_req: Request, res: Response) {
   const favicon = readFileSync(path.resolve('client/public/favicon.svg'), 'utf-8')
 
   res.status(200).set({ 'Content-Type': 'image/svg+xml' }).end(favicon)

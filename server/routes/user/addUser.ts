@@ -3,8 +3,8 @@ import { Request, Response } from 'express'
 import db from '~/server/utils/pool.ts'
 import { type TUserRole, type TUsersTableSchema } from '~/server/db/types.ts'
 import { ERROR_CODES } from '~/server/db/codes.ts'
-import requestLog from '~/server/log/request.ts'
-import { createUserToken } from '~/server/utils/users.ts'
+import requestLog from '~/server/utils/log.ts'
+import { createUserToken } from '~/server/utils/token.ts'
 
 type TPayload = { name: string; password: string; email: string; role: TUserRole }
 

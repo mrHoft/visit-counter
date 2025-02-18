@@ -2,8 +2,8 @@
 import { Request, Response } from 'express'
 import db from '~/server/utils/pool.ts'
 import { type TUsersTableSchema } from '~/server/db/types.ts'
-import { validateUser } from '~/server/utils/users.ts'
-import requestLog from '~/server/log/request.ts'
+import { validateUser } from '~/server/utils/token.ts'
+import requestLog from '~/server/utils/log.ts'
 
 const performLogin = async (req: Request<unknown, unknown, { name: string; password: string }>, res: Response) => {
   const { name, password } = req.body
