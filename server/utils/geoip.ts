@@ -2,22 +2,11 @@ import { closeSync, fstatSync, openSync, readSync } from 'node:fs'
 import path from 'node:path'
 import { Buffer } from 'node:buffer'
 import { isIP } from 'node:net'
+import { ipToNumber } from './ip.ts'
 
 const geodataDir = path.resolve(import.meta.dirname ?? '', '../data')
 
-const utils = {
-  ipToN4: function (ip: string) {
-    const a = ip.split('.')
-    return (
-      ((parseInt(a[0], 10) << 24) >>> 0) +
-      ((parseInt(a[1], 10) << 16) >>> 0) +
-      ((parseInt(a[2], 10) << 8) >>> 0) +
-      (parseInt(a[3], 10) >>> 0)
-    )
-  },
-}
-
-type TConf4 = {
+type TCache = {
   firstIP: number | null
   lastIP: number | null
   lastLine: number
@@ -33,7 +22,7 @@ class GeoIP {
   private dataFiles = {
     country: path.join(geodataDir, 'geoip-country.dat'),
   }
-  private cache4: TConf4 = {
+  private cache: TCache = {
     firstIP: null,
     lastIP: null,
     lastLine: 0,
@@ -48,19 +37,19 @@ class GeoIP {
   }
 
   private lookup4 = (ip: number): TGeoIP | undefined => {
-    if (!this.cache4.firstIP || !this.cache4.lastIP || !this.cache4.mainBuffer) {
+    if (!this.cache.firstIP || !this.cache.lastIP || !this.cache.mainBuffer) {
       console.error('GeoIP: No data')
       return
     }
 
-    if (ip > this.cache4.lastIP || ip < this.cache4.firstIP) {
+    if (ip > this.cache.lastIP || ip < this.cache.firstIP) {
       return
     }
 
     let fline = 0
-    let cline = this.cache4.lastLine
-    const buffer = this.cache4.mainBuffer!
-    const recordSize = this.cache4.recordSize
+    let cline = this.cache.lastLine
+    const buffer = this.cache.mainBuffer!
+    const recordSize = this.cache.recordSize
     const geodata: TGeoIP = {
       country: '',
     }
@@ -93,23 +82,23 @@ class GeoIP {
   private preload = () => {
     const datFile = openSync(this.dataFiles.country, 'r')
     const datSize = fstatSync(datFile).size
-    this.cache4.recordSize = this.RECORD_SIZE
+    this.cache.recordSize = this.RECORD_SIZE
 
-    this.cache4.mainBuffer = Buffer.alloc(datSize)
-    readSync(datFile, this.cache4.mainBuffer, 0, datSize, 0)
+    this.cache.mainBuffer = Buffer.alloc(datSize)
+    readSync(datFile, this.cache.mainBuffer, 0, datSize, 0)
     closeSync(datFile)
 
-    this.cache4.lastLine = datSize / this.cache4.recordSize - 1
-    this.cache4.lastIP = this.cache4.mainBuffer.readUInt32BE(this.cache4.lastLine * this.cache4.recordSize + 4)
-    this.cache4.firstIP = this.cache4.mainBuffer.readUInt32BE(0)
-    console.log('GeoIP: records loaded:', this.cache4.lastLine)
+    this.cache.lastLine = datSize / this.cache.recordSize - 1
+    this.cache.lastIP = this.cache.mainBuffer.readUInt32BE(this.cache.lastLine * this.cache.recordSize + 4)
+    this.cache.firstIP = this.cache.mainBuffer.readUInt32BE(0)
+    console.log('GeoIP: records loaded:', this.cache.lastLine)
   }
 
   public lookup = (ip: string) => {
     if (!ip) {
       return { country: null }
     } else if (isIP(ip) === 4) {
-      return this.lookup4(utils.ipToN4(ip)) ?? { country: null }
+      return this.lookup4(ipToNumber(ip)) ?? { country: null }
     }
 
     return { country: null }

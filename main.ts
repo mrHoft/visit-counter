@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, Next } from 'express'
 import checkTables from '~/server/db/checks.ts'
-import authMiddleware from '~/server/routes/authMiddleware.ts'
+import {authMiddleware,spamMiddleware} from './server/routes/middleware/index.ts'
 import {resSrcFiles, resPublicFiles, resPageAdmin, resFavicon} from '~/server/routes/client/index.ts'
 import {addCounter, performCounter, delCounter, editCounter, getAnalytics, getCounters} from '~/server/routes/counter/index.ts'
 import {addUser, delUser, editUser, getUsers, performLogin } from '~/server/routes/user/index.ts'
@@ -24,7 +24,7 @@ app.get('/src/*', resSrcFiles)
 app.get('/public/*', resPublicFiles)
 app.post('/api/login', performLogin)
 // Counter
-app.get('/:name', performCounter)
+app.get('/:name', spamMiddleware, performCounter)
 app.get('/api/analytics/:name', authMiddleware(), getAnalytics)
 // Counters
 app.get('/api/counters', authMiddleware(), getCounters)
