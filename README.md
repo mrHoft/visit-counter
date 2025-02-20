@@ -30,12 +30,14 @@ Featured:
 5. Admin panel: `localhost:3082`.
 6. Analytics: `localhost:3082/api/analytics/<conter-name>` (need to be authorized).
 
-### Counter optional query parameters:
-- type: 'badge' | 'number' | 'classic'
-- title: string
-- color: string
+### Counters:
+- (image/svg) badge [title, color]
+- (image/svg) classic
+- (text/plain) number
 
 ### Features:
-- Sign in by credentials, auto auth by token.
+- Repeatable request are not counting.
+- Client with ability to manage users and counters. Sign in by credentials, auto auth by token.
+- Analytics: geoip, system, platform, agent, graph.
 - SSR, Bundle on fly.
-- PWA
+- PWA.

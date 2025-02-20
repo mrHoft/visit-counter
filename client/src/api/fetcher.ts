@@ -29,7 +29,14 @@ export async function fetcher<T>(
     const res = await fetch(`${APP_HOST}${url}`, payload)
 
     if (res.status !== 200) {
-      return { error: await res.text() }
+      const error = await res.text().then((text) => {
+        if (text.startsWith('<html>')) {
+          const match = text.match(/<title>(.*?)<\/title>/)
+          if (match) return match[1]
+        }
+        return text
+      })
+      return { error }
     }
 
     return { data: await res.json() }

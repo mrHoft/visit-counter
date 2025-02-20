@@ -1,7 +1,7 @@
 // @deno-types="npm:@types/express@5"
 import { Request, Response } from 'express'
 import path from 'node:path'
-import mime from '~/client/utils/mime.ts'
+import mime from '~/server/utils/mime.ts'
 
 export default function resPublicFiles(req: Request, res: Response) {
   const filepath = req.path

@@ -67,7 +67,8 @@ const getAnalytics = async (req: Request<{ name: string }, unknown, unknown, TAn
   >(`${query};`, params).catch((err) => {
     return { error: err.message as string }
   })
-  if (error) res.status(500).end(error)
+
+  if (error) return res.status(500).end(error)
   if (!rows || !rows.length) return res.status(404).end(`No analytics for ${name} was found.`)
 
   const total = await getVisits(name)
