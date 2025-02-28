@@ -2,10 +2,10 @@
 
 <div align="center">
 
-  [![deno](https://img.shields.io/badge/deno-2.1-blue?logo=deno)](#)
-  [![express](https://img.shields.io/badge/express-4-blue?logo=express)](#)
-  [![postgres](https://img.shields.io/badge/Postgres-17-blue?logo=postgresql)](#)
-  [![react](https://img.shields.io/badge/React-18-blue?logo=react)](#)
+  [![deno](https://badge-service.deno.dev/plain/?title=Deno&icon=deno&value=2.1)](#)
+  [![express](https://badge-service.deno.dev/plain/?title=Express&icon=express&value=4)](#)
+  [![postgres](https://badge-service.deno.dev/plain/?title=Postgres&icon=postgres&value=17)](#)
+  [![react](https://badge-service.deno.dev/plain/?title=React&icon=react&value=18)](#)
 
   [![counter](https://counter.daytec.ru/counter-example)](#)
   [![server](https://github.com/mrHoft/visit-counter/actions/workflows/deploy.yml/badge.svg)](https://counter.daytec.ru/)
@@ -36,7 +36,7 @@ Featured:
 - (text/plain) number
 
 ### Features:
-- Repeatable request are not counting.
+- Repeatable requests are not counting.
 - Client with ability to manage users and counters. Sign in by credentials, auto auth by token.
 - Analytics: geoip, system, platform, agent, graph.
 - SSR, Bundle on fly.

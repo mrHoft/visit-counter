@@ -13,6 +13,9 @@ const requestRecords: TRequestRecords = {}
 const delay = 60 * 60 * 1000
 
 const spamMiddleware = (req: Request<{ name: string }>, _res: Response, next: NextFunction) => {
+  const agent = req.headers['user-agent']
+  if (agent && (agent as string).includes('github')) return next()
+
   const ip = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress
   const { name } = req.params
 
