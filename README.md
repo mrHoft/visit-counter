@@ -19,6 +19,12 @@ Includes:
 - Admin panel
 - Analytics
 
+<div align="center">
+
+  ![image](https://github.com/user-attachments/assets/bd1d13c2-1c43-4406-87dd-7d34861fb9e6)
+
+</div>
+
 Featured:
 - Auto installer of database and app using Docker
 
