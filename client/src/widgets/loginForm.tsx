@@ -1,5 +1,6 @@
 import { React } from '../../utils/deps.ts' // Relative path for deno bundler
 import Input from '../ui/input.tsx'
+import { InputPassword } from '../ui/password.tsx'
 import { ButtonSubmit } from '../ui/button.tsx'
 import { login } from '../api/login.ts'
 import storeUser from '../entities/user.ts'
@@ -38,14 +39,7 @@ export default function LoginForm({ server, modeChange }: TLoginFormProps) {
         required
         defaultValue={'admin'}
       />
-      <Input
-        type="password"
-        name="password"
-        placeholder="password"
-        pattern="^[0-9A-Za-z\\-_#$@&!]+$"
-        minLength={5}
-        required
-      />
+      <InputPassword name="password" placeholder="password" pattern="^[0-9A-Za-z\\-_#$@&!]+$" />
       <p style={{ color: 'red', height: '1lh', margin: 0 }}>{error}</p>
       <ButtonSubmit>Submit</ButtonSubmit>
     </form>

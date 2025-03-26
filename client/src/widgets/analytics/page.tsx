@@ -27,7 +27,11 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
           if (storeUser.user?.role === 'admin') {
             setCounters(data.map(counter => counter.name))
           } else {
-            setCounters(data.filter(counter => counter.creator_id === storeUser.user?.id).map(counter => counter.name))
+            setCounters(
+              data
+                .filter(counter => counter.creator_id === storeUser.user?.id || counter.name === storeUser.user?.name)
+                .map(counter => counter.name),
+            )
           }
         }
         if (error) Message.show(error, 'error')
@@ -45,7 +49,7 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
           const statsData: TStats = { period, lastMonth, currMonth, total }
           for (const stat of statNames) {
             statsData[stat] = data.reduce<Record<string, number>>((acc, row) => {
-              const val = row[stat]
+              const val = row[stat as keyof typeof row]
               if (val) {
                 acc[val] = acc[val] ? acc[val] + 1 : 1
               }

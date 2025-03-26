@@ -22,7 +22,7 @@ export default function App({ server, initialUser }: { server?: boolean; initial
 
   return (
     <>
-      <Header authorized={Boolean(user)} />
+      <Header user={user} />
       <main className="page">
         {mode === 'login' && <LoginForm server={server} modeChange={setMode} />}
         {mode === 'menu' && <MainMenu user={user!} server={server} modeChange={setMode} />}

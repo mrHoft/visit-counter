@@ -1,6 +1,7 @@
 import { React } from '../../../utils/deps.ts'
 import { ButtonSubmit, ButtonSecondary } from '../../ui/button.tsx'
 import Input from '../../ui/input.tsx'
+import { InputPassword } from '../../ui/password.tsx'
 import Select from '../../ui/select.tsx'
 import Modal from '../modal.tsx'
 import { userApi } from '../../api/user.ts'
@@ -83,15 +84,7 @@ export default function UserManage({ user, onSuccess }: TUserManageProps) {
           maxLength={24}
           required
         />
-        <Input
-          type="password"
-          name="password"
-          placeholder={`password${editMode ? '' : '*'}`}
-          pattern={PATTERN.password}
-          minLength={5}
-          maxLength={16}
-          required={!editMode}
-        />
+        <InputPassword name="password" placeholder={`password${editMode ? '' : '*'}`} />
         <Input type="text" name="email" placeholder="email" pattern={PATTERN.email} minLength={6} maxLength={24} />
         <Select name="role" options={roles} placeholder="role*" defaultValue={user?.role ?? 'guest'} required />
         <div className="flex_wrap" style={{ marginTop: '1rem' }}>
