@@ -1,12 +1,11 @@
 {
-  "version": "0.1.10",
+  "version": "0.1.11",
   "tasks": {
     "dev": "deno run --watch --allow-read --env-file=.env --allow-env --allow-net --unsafely-ignore-certificate-errors main.ts",
     "start": "deno run --allow-read --allow-write --env-file=.env --allow-env --allow-net --unsafely-ignore-certificate-errors main.ts"
   },
   "imports": {
     "@cross/jwt": "jsr:@cross/jwt@^0.5.0",
-    "@std/assert": "jsr:@std/assert@1",
     "@types/express": "npm:@types/express@^5.0.0",
     "@types/pg-pool": "npm:@types/pg-pool@^2.0.6",
     "express": "npm:express@^4.21.2",

@@ -32,9 +32,9 @@ Featured:
 1. Postgres must be configured.
 2. cp .env.example .env
 3. `deno task start`: to start server on 3082 port.
-4. Counter: `localhost:3082/<conter-name>/?type=badge&title=Counter&color=red`.
+4. Counter: `localhost:3082/<counter-name>/?type=badge&title=Counter&color=red`.
 5. Admin panel: `localhost:3082`.
-6. Analytics: `localhost:3082/api/analytics/<conter-name>` (need to be authorized).
+6. Analytics: `localhost:3082/api/analytics/<counter-name>` (need to be authorized).
 
 ### Counters:
 - (image/svg) badge [title, color]

@@ -1,4 +1,4 @@
-## Nginx server congig
+## Nginx server config
 ```
 server {
   server_name counter.domain.com;

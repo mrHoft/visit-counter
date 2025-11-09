@@ -2,13 +2,47 @@
   "name": "Visit counter",
   "short_name": "Counter",
   "start_url": "/",
-  "description": "Admin panel",
+  "scope": "/",
+  "description": "Visit counter admin panel.",
+  "categories": ["utilities", "developer-tools"],
   "display": "standalone",
+  "theme_color": "#040608",
+  "background_color": "#040608",
   "icons": [
     {
-      "src": "/public/logo.png",
+      "src": "./public/logo_512.png",
       "type": "image/png",
-      "sizes": "256x256"
+      "sizes": "512x512"
+    },
+    {
+      "src": "./public/logo_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./public/logo_180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "./public/logo_152.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "./public/logo_120.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "./public/logo_96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "./public/logo_72.png",
+      "type": "image/png",
+      "sizes": "72x72"
     }
   ]
 }
