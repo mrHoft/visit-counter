@@ -1,7 +1,8 @@
 // @deno-types="npm:@types/express@5"
 import { Response } from 'express'
+
+import { executeQuery } from '~/server/db/client.ts'
 import getCounter from '~/server/template/counter.ts'
-import db from '~/server/utils/pool.ts'
 import requestLog from '~/server/utils/log.ts'
 import addAnalytics from './addAnalytics.ts'
 import type { TCounterRequest } from '~/server/routes/counter/types.ts'
@@ -17,14 +18,14 @@ const performCounter = async (req: TCounterRequest, res: Response) => {
 
   let value = 0
   if (req.spam) {
-    const { rows } = await db.pool.query<Record<'value', number>>(
+    const rows = await executeQuery<Record<'value', number>>(
       'SELECT value FROM counters WHERE name = $1;',
       [name],
     )
     if (!rows.length) return res.status(404).end(`Counter ${name} not found.`)
     value = rows[0].value
   } else {
-    const { rows } = await db.pool.query<Record<'value', number>>(
+    const rows = await executeQuery<Record<'value', number>>(
       'UPDATE counters SET value = value + 1 WHERE name = $1 RETURNING value;',
       [name],
     )

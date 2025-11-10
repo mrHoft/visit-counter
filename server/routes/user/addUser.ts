@@ -1,6 +1,7 @@
 // @deno-types="npm:@types/express@5"
 import { Request, Response } from 'express'
-import db from '~/server/utils/pool.ts'
+
+import { executeQuery } from '~/server/db/client.ts'
 import { type TUserRole, type TUsersTableSchema } from '~/server/db/types.ts'
 import { ERROR_CODES } from '~/server/db/codes.ts'
 import requestLog from '~/server/utils/log.ts'
@@ -8,7 +9,7 @@ import { createUserToken } from '~/server/utils/token.ts'
 
 type TPayload = { name: string; password: string; email: string; role: TUserRole }
 
-const addUser = async (req: Request<{ id: number }, unknown, TPayload>, res: Response) => {
+const addUser = async (req: Request, res: Response) => {
   const { name, password, email, role } = req.body
   const { name: createdBy } = req.user!
   requestLog('Add user', req, createdBy)
@@ -19,17 +20,17 @@ const addUser = async (req: Request<{ id: number }, unknown, TPayload>, res: Res
 
   const token = await createUserToken(name, password)
 
-  db.pool.query<TUsersTableSchema>(
+  executeQuery<TUsersTableSchema>(
     'INSERT INTO users (name, email, role, token, created_by) VALUES ($1, $2, $3, $4, $5) RETURNING *;',
     [name, email, role, token, createdBy],
   )
-    .then(({ rows }) => {
+    .then((rows) => {
       res.status(200).json(rows[0])
-    }).catch((err) => {
-      if (err.code === ERROR_CODES.duplicate) {
+    }).catch((error) => {
+      if (error.fields.code === ERROR_CODES.duplicate) {
         return res.status(403).end(`User ${name} already exists.`)
       }
-      res.status(500).end(err.message)
+      res.status(500).end(error.message)
     })
 }
 

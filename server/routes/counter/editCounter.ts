@@ -1,10 +1,11 @@
 // @deno-types="npm:@types/express@5"
 import { Request, Response } from 'express'
-import db from '~/server/utils/pool.ts'
+
+import { executeQuery } from '~/server/db/client.ts'
 import { type TCountersTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/utils/log.ts'
 
-const editCounter = (req: Request<{ id: number }, unknown, { name: string; value: string }>, res: Response) => {
+const editCounter = (req: Request, res: Response) => {
   const { id } = req.params
   const { name, value } = req.body
   const { name: createdBy } = req.user!
@@ -14,7 +15,7 @@ const editCounter = (req: Request<{ id: number }, unknown, { name: string; value
     return res.status(403).end('Wrong counter details')
   }
 
-  db.pool.query<TCountersTableSchema>(
+  executeQuery<TCountersTableSchema>(
     'UPDATE counters SET name = $1, value = $2, created_by = $3 WHERE id = $4 RETURNING *;',
     [
       name,
@@ -23,7 +24,7 @@ const editCounter = (req: Request<{ id: number }, unknown, { name: string; value
       id,
     ],
   )
-    .then(({ rows }) => {
+    .then((rows) => {
       res.status(200).json(rows[0])
     }).catch((err) => {
       res.status(500).end(err.message)

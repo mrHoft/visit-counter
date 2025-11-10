@@ -1,15 +1,16 @@
 // @deno-types="npm:@types/express@5"
 import { Request, Response } from 'express'
-import db from '~/server/utils/pool.ts'
+
+import { executeQuery } from '~/server/db/client.ts'
 import { type TUserRole, type TUsersTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/utils/log.ts'
 import { createUserToken } from '~/server/utils/token.ts'
 
 type TPayload = { name: string; password?: string; email: string; role: TUserRole }
 
-const editUser = async (req: Request<{ id: number }, unknown, TPayload>, res: Response) => {
+const editUser = async (req: Request, res: Response) => {
   const { id } = req.params
-  const { name, password, email, role } = req.body
+  const { name, password, email, role } = req.body as TPayload
   const { name: createdBy } = req.user!
   requestLog('Edit user', req, createdBy)
 
@@ -27,11 +28,11 @@ const editUser = async (req: Request<{ id: number }, unknown, TPayload>, res: Re
 
   console.log(set)
 
-  db.pool.query<TUsersTableSchema>(`UPDATE users ${set} WHERE id = $5 RETURNING *;`, values)
-    .then(({ rows }) => {
+  executeQuery<TUsersTableSchema>(`UPDATE users ${set} WHERE id = $5 RETURNING *;`, values)
+    .then((rows) => {
       res.status(200).json(rows[0])
-    }).catch((err) => {
-      res.status(500).end(err.message)
+    }).catch((error) => {
+      res.status(500).end(error.message)
     })
 }
 

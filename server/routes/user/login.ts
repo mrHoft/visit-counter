@@ -1,11 +1,12 @@
 // @deno-types="npm:@types/express@5"
 import { Request, Response } from 'express'
-import db from '~/server/utils/pool.ts'
+
+import { executeQuery } from '~/server/db/client.ts'
 import { type TUsersTableSchema } from '~/server/db/types.ts'
 import { validateUser } from '~/server/utils/token.ts'
 import requestLog from '~/server/utils/log.ts'
 
-const performLogin = async (req: Request<unknown, unknown, { name: string; password: string }>, res: Response) => {
+const performLogin = async (req: Request, res: Response) => {
   const { name, password } = req.body
   requestLog('Login', req, name)
 
@@ -13,7 +14,7 @@ const performLogin = async (req: Request<unknown, unknown, { name: string; passw
     return res.status(403).end('Forbidden')
   }
 
-  const { rows } = await db.pool.query<TUsersTableSchema>(
+  const rows = await executeQuery<TUsersTableSchema>(
     'SELECT * FROM users WHERE name = $1;',
     [name],
   )

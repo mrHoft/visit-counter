@@ -1,11 +1,10 @@
-// @deno-types="npm:@types/express@5"
 import { Request, Response } from 'express'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { ReactDomServer } from '~/client/utils/deps.ts'
 import App from '~/client/src/app.tsx'
 import { getCookieByKey } from '~/client/utils/cookie.ts'
-import db from '~/server/utils/pool.ts'
+import { executeQuery } from '~/server/db/client.ts'
 import { type TUser } from '~/client/src/api/types.ts'
 import getVersion from '~/client/utils/version.ts'
 import requestLog from '~/server/utils/log.ts'
@@ -16,7 +15,7 @@ const getAuthState = async (cookie?: string) => {
   if (cookie) {
     const token = getCookieByKey(cookie, 'vc_token')
     if (token) {
-      const { rows } = await db.pool.query<TUser>(
+      const rows = await executeQuery<TUser>(
         'SELECT * FROM users WHERE token = $1;',
         [token],
       )
@@ -30,11 +29,11 @@ const getAuthState = async (cookie?: string) => {
 }
 
 const getStats = async () => {
-  const { users } = (await db.pool.query<{ users: number }>('SELECT count(*) as "users" FROM users;')).rows[0]
+  const { users } = (await executeQuery<{ users: number }>('SELECT count(*)::int AS "users" FROM users;'))[0]
   const { counters } =
-    (await db.pool.query<{ counters: number }>('SELECT count(*) as "counters" FROM counters;')).rows[0]
+    (await executeQuery<{ counters: number }>('SELECT count(*)::int AS "counters" FROM counters;'))[0]
   const { requests } =
-    (await db.pool.query<{ requests: number }>('SELECT sum(value) as "requests" FROM counters;')).rows[0]
+    (await executeQuery<{ requests: number }>('SELECT sum(value)::int AS "requests" FROM counters;'))[0]
   return { users, counters, requests }
 }
 
@@ -42,6 +41,7 @@ export default async function resPageAdmin(req: Request, res: Response) {
   const { cookie } = req.headers
   const ip = req.headers['x-forwarded-for'] || req.ip || req.socket.remoteAddress
   const stats = { ...await getStats(), host: APP_HOST, ip, version: getVersion() }
+  console.log(stats)
   const user = await getAuthState(cookie)
   requestLog('Admin page', req, user?.name)
 
