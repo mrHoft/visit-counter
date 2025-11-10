@@ -1,11 +1,11 @@
 import { React } from '../../../utils/deps.ts'
-import { statNames, type TStatName, type TStats } from './const.ts'
+import { statNames, type TStatName, type TStatsData } from './const.ts'
 import Toggle from '../../ui/toggle.tsx'
 import { PieChart } from '../../ui/chart/pie.tsx'
 
 const toggleOptions = statNames.map((name: TStatName, id) => ({ id, label: name }))
 
-export default function AnalyticsCharts({ stats }: { stats: TStats }) {
+export default function AnalyticsCharts({ stats }: { stats: TStatsData }) {
   if (stats.total === 0) return null
   const [stat, setStat] = React.useState<TStatName>('country')
 

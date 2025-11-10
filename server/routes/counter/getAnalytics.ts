@@ -2,6 +2,7 @@
 import { Request, Response } from 'express'
 
 import { executeQuery } from '~/server/db/client.ts'
+import { ERROR_CODES } from '~/server/db/codes.ts'
 import { type TCounterType } from '~/server/template/counter.ts'
 import { type TCounterTableSchema } from '~/server/db/types.ts'
 import requestLog from '~/server/utils/log.ts'
@@ -13,7 +14,7 @@ const getVisits = async (counterName: string) => {
 
 const getPeriod = async (counterName: string, dateFrom: Date, dateTo: Date) => {
   return (await executeQuery<{ count: number }>(
-    `SELECT count(*) FROM "${counterName}" WHERE created_at >= $1 AND created_at <= $2;`,
+    `SELECT count(*)::int FROM "${counterName}" WHERE created_at >= $1 AND created_at <= $2;`,
     [dateFrom, dateTo],
   ))[0].count
 }
@@ -68,6 +69,10 @@ const getAnalytics = async (req: Request<{ name: string }, unknown, unknown, TAn
   >(`${query};`, params)
     .then((rows) => ({ rows }))
     .catch((err) => {
+      if (err.fields.code === ERROR_CODES.relation) {
+        return { error: `No analytics for ${name}` }
+      }
+
       return { error: err.message as string }
     })
 

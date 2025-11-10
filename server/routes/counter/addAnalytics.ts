@@ -21,7 +21,7 @@ const addAnalytics = (req: TCounterRequest): TAnalyticsResponse => {
     )
 
   return addAnalyticsRecord().then(() => ({ message: 'Success!' })).catch((error) => {
-    if (error.code === ERROR_CODES.relation) {
+    if (error.fields.code === ERROR_CODES.relation) {
       console.log(`No \x1b[33m${name}\x1b[0m table found: creating...`)
       return executeQuery(initTableCounter(name)).then(() =>
         addAnalyticsRecord().then(() => ({ message: 'Success!' })).catch((error) => {

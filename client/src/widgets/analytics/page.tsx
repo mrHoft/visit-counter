@@ -6,7 +6,7 @@ import { analyticsApi } from '../../api/analytics.ts'
 import Message from '../message.tsx'
 import Select from '../../ui/select.tsx'
 import storeUser from '../../entities/user.ts'
-import { statNames, type TStats } from './const.ts'
+import { statNames, type TStatsData, type TGraphData } from './const.ts'
 import AnalyticsCharts from './charts.tsx'
 import AnalyticsGraph from './graph.tsx'
 
@@ -14,8 +14,8 @@ type TAnalyticsProps = { modeChange: (mode: TMode) => void }
 
 export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
   const [counters, setCounters] = React.useState<string[]>([])
-  const [stats, setStats] = React.useState<TStats>({ period: 0, lastMonth: 0, currMonth: 0, total: 0 })
-  const [graph, setGraph] = React.useState<Record<string, number> | null>(null)
+  const [stats, setStats] = React.useState<TStatsData>({ period: 0, lastMonth: 0, currMonth: 0, total: 0 })
+  const [graph, setGraph] = React.useState<TGraphData | null>(null)
   const [loading, setLoading] = React.useState(false)
 
   const getCounters = () => {
@@ -46,7 +46,7 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
       .then(({ data: response, error }) => {
         if (response) {
           const { data, period, lastMonth, currMonth, total } = response
-          const statsData: TStats = { period, lastMonth, currMonth, total }
+          const statsData: TStatsData = { period, lastMonth, currMonth, total }
           for (const stat of statNames) {
             statsData[stat] = data.reduce<Record<string, number>>((acc, row) => {
               const val = row[stat as keyof typeof row]
@@ -58,7 +58,7 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
           }
           setStats(statsData)
 
-          const graphData = data.reduce<Record<string, number>>((acc, row) => {
+          const graphData: TGraphData = data.reduce<Record<string, number>>((acc, row) => {
             const timestamp = row.created_at.slice(5, 10)
             acc[timestamp] = acc[timestamp] ? acc[timestamp] + 1 : 1
             return acc
