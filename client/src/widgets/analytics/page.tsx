@@ -6,7 +6,7 @@ import { analyticsApi } from '../../api/analytics.ts'
 import Message from '../message.tsx'
 import Select from '../../ui/select.tsx'
 import storeUser from '../../entities/user.ts'
-import { statNames, type TStatsData, type TGraphData } from './const.ts'
+import { type TStatsData, type TGraphData } from '../../api/types.ts'
 import AnalyticsCharts from './charts.tsx'
 import AnalyticsGraph from './graph.tsx'
 
@@ -45,25 +45,16 @@ export default function PageAnalytics({ modeChange }: TAnalyticsProps) {
       .get(name)
       .then(({ data: response, error }) => {
         if (response) {
-          const { data, period, lastMonth, currMonth, total } = response
-          const statsData: TStatsData = { period, lastMonth, currMonth, total }
-          for (const stat of statNames) {
-            statsData[stat] = data.reduce<Record<string, number>>((acc, row) => {
-              const val = row[stat as keyof typeof row]
-              if (val) {
-                acc[val] = acc[val] ? acc[val] + 1 : 1
-              }
-              return acc
-            }, {})
+          const { stats, graph, period, lastMonth, currMonth, total } = response
+          const statsData: TStatsData = {
+            ...stats,
+            period,
+            lastMonth,
+            currMonth,
+            total
           }
           setStats(statsData)
-
-          const graphData: TGraphData = data.reduce<Record<string, number>>((acc, row) => {
-            const timestamp = row.created_at.slice(5, 10)
-            acc[timestamp] = acc[timestamp] ? acc[timestamp] + 1 : 1
-            return acc
-          }, {})
-          setGraph(graphData)
+          setGraph(graph)
         }
         if (error) Message.show(error, 'error')
       })

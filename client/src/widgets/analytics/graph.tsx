@@ -18,8 +18,8 @@ export default function AnalyticsGraph({ data, period, lastMonth, currMonth, tot
   const percent = ((averageCurrMonth - averageLastMonth) / (averageLastMonth || 1)) * 100
   const grow = percent > 0
   return (
-    <div className="analytincs">
-      <div className="analytincs__total">
+    <div className="analytics">
+      <div className="analytics__total">
         <span>{`Period: ${period}`}</span>
         <span>{`Total: ${total}`}</span>
         <span style={{ color: grow ? 'green' : 'red' }}>

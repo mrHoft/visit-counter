@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 import { executeQuery } from '~/server/db/client.ts'
 import { ERROR_CODES } from '~/server/db/codes.ts'
 import { type TCounterType } from '~/server/template/counter.ts'
-import { type TCounterTableSchema } from '~/server/db/types.ts'
+import { type TStatName } from '~/client/src/api/types.ts'
 import requestLog from '~/server/utils/log.ts'
 
 const getVisits = async (counterName: string) => {
@@ -13,10 +13,19 @@ const getVisits = async (counterName: string) => {
 }
 
 const getPeriod = async (counterName: string, dateFrom: Date, dateTo: Date) => {
-  return (await executeQuery<{ count: number }>(
+  const { count, error }: { count?: number; error?: string } = await executeQuery<{ count: number }>(
     `SELECT count(*)::int FROM "${counterName}" WHERE created_at >= $1 AND created_at <= $2;`,
     [dateFrom, dateTo],
-  ))[0].count
+  )
+    .then((rows) => ({ count: rows[0].count }))
+    .catch((err) => {
+      if (err.fields.code === ERROR_CODES.relation) {
+        return { error: `No analytics for ${counterName} was found.` }
+      }
+
+      return { error: err.message as string }
+    })
+  return { count, error }
 }
 
 type TAnalyticsQuery = {
@@ -35,63 +44,94 @@ const getAnalytics = async (req: Request<{ name: string }, unknown, unknown, TAn
   const dateFrom = from ? new Date(from) : new Date(new Date().setMonth(new Date().getMonth() - 1, 1))
   const dateTo = to ? new Date(to) : new Date()
 
-  let query = /* sql */ `SELECT
-    created_at,
-    country,
-    platform,
-    agent,
-    CASE
-      WHEN is_mobile=true THEN 'mobile'
-      WHEN is_mobile=false THEN 'desktop'
-      ELSE NULL
-    END AS "mobile",
-    title,
-    color,
-    "type"
-  FROM "${name}"
-  WHERE created_at BETWEEN $1 AND $2`
-  const params: (Date | string)[] = [dateFrom, dateTo]
-  if (title) {
-    params.push(title)
-    query = `${query} AND title = $${params.length}`
-  }
-  if (color) {
-    params.push(color)
-    query = `${query} AND color = $${params.length}`
-  }
-  if (type) {
-    params.push(type)
-    query = `${query} AND type = $${params.length}`
-  }
-
-  const { rows, error }: { rows?: TCounterTableSchema[]; error?: string } = await executeQuery<
-    TCounterTableSchema
-  >(`${query};`, params)
-    .then((rows) => ({ rows }))
-    .catch((err) => {
-      if (err.fields.code === ERROR_CODES.relation) {
-        return { error: `No analytics for ${name}` }
-      }
-
-      return { error: err.message as string }
-    })
-
-  if (error) return res.status(500).end(error)
-  if (!rows || !rows.length) return res.status(404).end(`No analytics for ${name} was found.`)
-
-  const total = await getVisits(name)
-  const lastMonth = await getPeriod(
-    name,
-    new Date(new Date().setMonth(new Date().getMonth() - 1, 1)),
-    new Date(new Date().setMonth(new Date().getMonth(), 0)),
-  )
   const currMonth = await getPeriod(
     name,
     new Date(new Date().setMonth(new Date().getMonth(), 1)),
     new Date(new Date().setMonth(new Date().getMonth())),
   )
+  console.log(currMonth)
+  if (currMonth.error) return res.status(500).end(currMonth.error)
+  if (!currMonth.count) return res.status(404).end(`No analytics for ${name} was found.`)
 
-  res.status(200).json({ data: rows, period: rows.length, lastMonth, currMonth, total })
+  const lastMonth = await getPeriod(
+    name,
+    new Date(new Date().setMonth(new Date().getMonth() - 1, 1)),
+    new Date(new Date().setMonth(new Date().getMonth(), 0)),
+  )
+  const total = await getVisits(name)
+
+  const whereConditions: string[] = ['created_at BETWEEN $1 AND $2']
+  const params: (Date | string)[] = [dateFrom, dateTo]
+  let paramCount = 2
+
+  if (title) {
+    paramCount++
+    whereConditions.push(`title = $${paramCount}`)
+    params.push(title)
+  }
+  if (color) {
+    paramCount++
+    whereConditions.push(`color = $${paramCount}`)
+    params.push(color)
+  }
+  if (type) {
+    paramCount++
+    whereConditions.push(`type = $${paramCount}`)
+    params.push(type)
+  }
+
+  const whereClause = whereConditions.join(' AND ')
+
+  const graphQuery = /* sql */ `
+    SELECT to_char(created_at, 'MM-DD') as date, COUNT(*)::int as count
+    FROM "${name}"
+    WHERE ${whereClause}
+    GROUP BY to_char(created_at, 'MM-DD')
+    ORDER BY date
+  `
+
+  const statsQuery = /* sql */ `
+    SELECT
+      jsonb_object_agg(coalesce(country, 'unknown'), count) as country,
+      jsonb_object_agg(coalesce(platform, 'unknown'), count) as platform,
+      jsonb_object_agg(coalesce(agent, 'unknown'), count) as agent,
+      jsonb_object_agg(
+        CASE
+          WHEN is_mobile = true THEN 'mobile'
+          WHEN is_mobile = false THEN 'desktop'
+          ELSE 'unknown'
+        END,
+        count
+      ) as mobile,
+      jsonb_object_agg(coalesce(title, 'unknown'), count) as title,
+      jsonb_object_agg(coalesce(color, 'unknown'), count) as color,
+      jsonb_object_agg(coalesce(type::text, 'unknown'), count) as type
+    FROM (
+      SELECT country, platform, agent, is_mobile, title, color, type, COUNT(*)::int as count
+      FROM "${name}"
+      WHERE ${whereClause}
+      GROUP BY country, platform, agent, is_mobile, title, color, type
+    ) aggregated
+  `
+
+  const [graphResult, statsResult] = await Promise.all([
+    executeQuery<{ date: string; count: number }>(graphQuery, params),
+    executeQuery<Record<TStatName, Record<string, number>>>(statsQuery, params),
+  ])
+
+  const graphData = graphResult.reduce<Record<string, number>>((acc, row) => {
+    acc[row.date] = row.count
+    return acc
+  }, {})
+
+  res.status(200).json({
+    stats: statsResult[0],
+    graph: graphData,
+    period: Object.values(graphData).reduce((sum, count) => sum + count, 0),
+    lastMonth: lastMonth.count,
+    currMonth: currMonth.count,
+    total,
+  })
 }
 
 export default getAnalytics
