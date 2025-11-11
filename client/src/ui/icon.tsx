@@ -58,3 +58,18 @@ export const ArrowUp = ({ size = 16 }) => (
     <path stroke="currentColor" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4"></path>
   </svg>
 )
+
+export const InstallDesktopIcon = ({ size = 32 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24">
+    <path fill="#fff" d="m8,21v-2h-4c-.55,0-1.02-.2-1.41-.59s-.59-.86-.59-1.41V5c0-.55.2-1.02.59-1.41s.86-.59,1.41-.59h8v2H4v12h16v-3h2v3c0,.55-.2,1.02-.59,1.41s-.86.59-1.41.59h-4v2h-8Zm9-7l-5-5,1.4-1.4,2.6,2.58V3h2v7.18l2.6-2.58,1.4,1.4-5,5Z" />
+  </svg>
+)
+
+export const InstallAndroidIcon = ({ size = 32 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="#fff">
+    <polyline points="13.4 7.6 16 10.17 16 3 18 3 18 10.17 20.6 7.6 22 9 17 14" />
+    <polygon points="17 14 12 9 13.4 7.6 16 10.17 16 3 18 3 18 10.17 20.6 7.6 22 9 17 14" />
+    <path d="m8.5,13.42l.95,1.7c-1.4.79-2.33,2.27-2.45,3.88h10c-.12-1.6-1.05-3.09-2.45-3.88l.95-1.7-.5-.3-.97,1.75c-.93-.51-2.98-.54-4.05,0l-.97-1.75-.5.3Zm6.25,3.08v1h-1v-1h1Zm-4.5,1h-1v-1h1v1Z" />
+    <path d="m6,22h12c1.1,0,2-.9,2-2v-4.94h-2v4.94H6V4h8.25v-2H6c-1.1,0-2,.9-2,2v16c0,1.1.9,2,2,2Z" />
+  </svg>
+)

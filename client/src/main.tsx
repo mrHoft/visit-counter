@@ -6,9 +6,7 @@ import storeStats, { type TStats } from './entities/stats.ts'
 import { scribe } from './scribe.ts'
 
 declare global {
-  // deno-lint-ignore no-var
   var __INITIAL_USER__: TUser | undefined
-  // deno-lint-ignore no-var
   var __INITIAL_STATS__: TStats | undefined
 }
 

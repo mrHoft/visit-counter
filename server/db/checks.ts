@@ -10,7 +10,12 @@ async function initializeDatabase() {
   let client: Client | null = null
 
   try {
-    const systemClient = new Client({ ...dbConfig, database: 'postgres', user: 'postgres', password: '123' }) // Connect to default system database
+    const systemClient = new Client({
+      ...dbConfig,
+      database: 'postgres',
+      user: 'postgres',
+      password: Deno.env.get('PG_PWD'),
+    }) // Connect to default system database
     await systemClient.connect()
 
     const userExists = await systemClient.queryObject<{ exists: boolean }>(

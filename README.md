@@ -28,13 +28,22 @@ Includes:
 Featured:
 - Auto installer of database and app using Docker
 
+### Project install:
+1. Postgres must be installed.
+2. Deno must be installed.
+3. cp .env.example .env
+4. Postgres default user password must be defined and changed in .env.
+```
+> sudo -u postgres psql
+# /password postgres
+```
+5. `deno install`: to install packages.
+6. `deno task start`: to start server on 3082 port (by default).
+
 ### Project usage:
-1. Postgres must be configured.
-2. cp .env.example .env
-3. `deno task start`: to start server on 3082 port.
-4. Counter: `localhost:3082/<counter-name>/?type=badge&title=Counter&color=red`.
-5. Admin panel: `localhost:3082`.
-6. Analytics: `localhost:3082/api/analytics/<counter-name>` (need to be authorized).
+- Counter: `localhost:3082/<counter-name>/?type=badge&title=Counter&color=red` ('default': default counter-name).
+- Admin panel: `localhost:3082`.
+- Analytics: `localhost:3082/api/analytics/<counter-name>` (need to be authorized).
 
 ### Counters:
 - (image/svg) badge [title, color]

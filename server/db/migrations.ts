@@ -12,6 +12,18 @@ export async function runMigrations(client: Client) {
   const migrationFiles: string[] = []
   const migrationFolder = new URL('./migrations', import.meta.url).pathname
   // console.log('Migration folder:', migrationFolder)
+
+  try {
+    const folderInfo = await Deno.stat(migrationFolder)
+    if (!folderInfo.isDirectory) {
+      console.log('\x1b[31m  Migration path is not a directory, skipping migrations.\x1b[0m')
+      return
+    }
+  } catch {
+    console.log('\x1b[31m  Migration folder does not exist, skipping migrations.\x1b[0m')
+    return
+  }
+
   for await (const dirEntry of Deno.readDir(migrationFolder)) {
     if (dirEntry.isFile && dirEntry.name.endsWith('.sql')) {
       migrationFiles.push(dirEntry.name)

@@ -2,16 +2,21 @@ import { React } from '../../utils/deps.ts'
 import { type TUser } from '../api/types.ts'
 import storeUser from '../entities/user.ts'
 import storeStats, { type TStats } from '../entities/stats.ts'
-import { CounterIcon, AnalyticsIcon, UsersIcon, LoginIcon, LogoutIcon, InfoIcon } from '../ui/icon.tsx'
+import { CounterIcon, AnalyticsIcon, UsersIcon, LoginIcon, LogoutIcon, InfoIcon, InstallDesktopIcon, InstallAndroidIcon } from '../ui/icon.tsx'
+import { InstallManager } from '../../utils/installManager.ts'
+import Message from './message.tsx'
 
 export type TMode = 'login' | 'menu' | 'counters' | 'users' | 'analytics' | 'about'
 
-type TMunuProps = { user: TUser; server?: boolean; modeChange: (mode: TMode) => void }
+type TMenuProps = { user: TUser; server?: boolean; modeChange: (mode: TMode) => void }
 const defaultStats = { counters: 0, users: 0, requests: 0, host: '', ip: '', version: '' }
 
-export default function MainMenu({ user, server, modeChange }: TMunuProps) {
-  const [isClient, setIsClient] = server ? [false, () => {}] : React.useState(false)
-  const [stats, setStats] = server ? [defaultStats, () => {}] : React.useState<TStats>(defaultStats)
+export default function MainMenu({ user, server, modeChange }: TMenuProps) {
+  const [isClient, setIsClient] = server ? [false, () => { }] : React.useState(false)
+  const [stats, setStats] = server ? [defaultStats, () => { }] : React.useState<TStats>(defaultStats)
+  const [canBeInstalled, setCanBeInstalled] = server ? [false, () => { }] : React.useState(false)
+  const [deviceType, setDeviceType] = server ? ['unknown', () => { }] : React.useState('unknown')
+  const installManager = server ? { current: null } : React.useRef<InstallManager | null>(null)
   const authorized = Boolean(user)
 
   if (!server) {
@@ -21,6 +26,17 @@ export default function MainMenu({ user, server, modeChange }: TMunuProps) {
       storeStats.on('update', () => {
         setStats(storeStats.stats)
       })
+
+      if (!installManager.current) {
+        installManager.current = new InstallManager()
+        installManager.current.registerCallbacks({
+          onReadyToInstall: (ready: boolean) => {
+            setCanBeInstalled(ready)
+          }
+        })
+      }
+      setCanBeInstalled(installManager.current.installAvailable())
+      setDeviceType(installManager.current.getDeviceType())
     }, [])
   }
 
@@ -54,6 +70,17 @@ export default function MainMenu({ user, server, modeChange }: TMunuProps) {
 
   const handleAbout = () => {
     modeChange('about')
+  }
+
+  const handleInstall = () => {
+    if (installManager.current) {
+      installManager.current.installPWA().then(result => {
+        setCanBeInstalled(!result.done)
+        if (result.error) {
+          Message.show(result.error, 'error')
+        }
+      })
+    }
   }
 
   return (
@@ -113,6 +140,12 @@ export default function MainMenu({ user, server, modeChange }: TMunuProps) {
             <div className="menu__btn_add">{stats.ip}</div>
           </div>
         </>
+      )}
+      {canBeInstalled && (
+        <div className="menu__btn" onClick={handleInstall}>
+          {deviceType === 'android' ? <InstallAndroidIcon /> : <InstallDesktopIcon />}
+          <div>Install</div>
+        </div>
       )}
     </div>
   )

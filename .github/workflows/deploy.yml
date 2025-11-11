@@ -17,10 +17,11 @@ jobs:
           echo APP_PORT=3082 >> .env
           echo APP_HOST=${{ secrets.APP_HOST }} >> .env
           echo PG_URL=127.0.0.1 >> .env
+          echo PG_PWD=${{ secrets.PG_PWD }} >> .env
           echo PG_PORT=5432 >> .env
           echo PG_DB=counter >> .env
           echo PG_USER=counter >> .env
-          echo PG_PWD=${{ secrets.PG_PWD }} >> .env
+          echo PG_USER_PWD=${{ secrets.PG_USER_PWD }} >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo ADMIN_NAME=${{ secrets.ADMIN_NAME }} >> .env
           echo ADMIN_PWD=${{ secrets.ADMIN_PWD }} >> .env
